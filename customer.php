@@ -55,7 +55,7 @@
                 </tr>
                 <tr>
                     <td>Date of Birth</td>
-                    <td><input type='date' name='date of birth' class='form-control' /></td>
+                    <td><input type='date' name='birthdate' class='form-control' /></td>
                 </tr>
                 <tr>
                     <td></td>

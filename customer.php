@@ -29,7 +29,7 @@
                 // bind the parameters
                 $stmt->bindParam(':customer_name', $c_name);
                 // specify when this record was inserted to the database
-                $dob = date('Y-m-d H:i:s');
+                $dob = date('Y-m-d',strtotime($_POST['birthdate']));
                 $stmt->bindParam(':birthdate', $dob);
                 // Execute the query
                 if ($stmt->execute()) {

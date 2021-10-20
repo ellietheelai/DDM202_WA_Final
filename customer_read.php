@@ -15,14 +15,14 @@
     <!-- container -->
     <div class="container">
         <div class="page-header">
-            <h1>Read Product</h1>
+            <h1>Read Customers</h1>
         </div>
 
         <!-- PHP read one record will be here -->
         <?php
         // get passed parameter value, in this case, the record ID
         // isset() is a PHP function used to verify if a value is there or not
-        $id = isset($_GET['id']) ? $_GET['id'] : die('ERROR: Record ID not found.');
+        $customer_id = isset($_GET['customer_id']) ? $_GET['customer_id'] : die('ERROR: Record ID not found.');
 
         //include database connection
         include 'config/database.php';
@@ -30,11 +30,11 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT id, name, description, price FROM products WHERE id = ? LIMIT 0,1";
+            $query = "SELECT customer_id, customer_name, birthdate FROM customers WHERE customer_id = ? LIMIT 0,1";
             $stmt = $con->prepare($query);
 
             // this is the first question mark
-            $stmt->bindParam(1, $id);
+            $stmt->bindParam(1, $customer_id);
 
             // execute our query
             $stmt->execute();
@@ -43,9 +43,8 @@
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             // values to fill up our form
-            $name = $row['name'];
-            $description = $row['description'];
-            $price = $row['price'];
+            $customer_name = $row['customer_name'];
+            $birthdate = $row['birthdate'];
         }
 
         // show error
@@ -60,21 +59,18 @@
         <!--we have our html table here where the record will be displayed-->
         <table class='table table-hover table-responsive table-bordered'>
             <tr>
-                <td>Name</td>
-                <td><?php echo htmlspecialchars($name, ENT_QUOTES);  ?></td>
+                <td>Customer Name</td>
+                <td><?php echo htmlspecialchars($customer_name, ENT_QUOTES);  ?></td>
             </tr>
             <tr>
-                <td>Description</td>
-                <td><?php echo htmlspecialchars($description, ENT_QUOTES);  ?></td>
+                <td>Birthdate</td>
+                <td><?php echo date($birthdate, ENT_QUOTES);  ?></td>
             </tr>
-            <tr>
-                <td>Price</td>
-                <td><?php echo htmlspecialchars($price, ENT_QUOTES);  ?></td>
-            </tr>
+            
             <tr>
                 <td></td>
                 <td>
-                    <a href='index.php' class='btn btn-danger'>Back to read products</a>
+                    <a href='customer_index.php' class='btn btn-danger'>Back to read customers</a>
                 </td>
             </tr>
         </table>

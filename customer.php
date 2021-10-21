@@ -21,16 +21,28 @@
             include 'config/database.php';
             try {
                 // insert query
-                $query = "INSERT INTO customers SET customer_name=:customer_name, birthdate=:birthdate";
+                $query = "INSERT INTO customers SET username=: username, first_name=: first_name, last_name=: last_name, birthdate=:birthdate, password=: password, gender=: gender, registration_time_date=: registration_date_time, account_status=: account_status";
                 // prepare query for execution
                 $stmt = $con->prepare($query);
                 // posted values
-                $c_name = htmlspecialchars(strip_tags($_POST['customer_name']));
+                $username = htmlspecialchars(strip_tags($_POST['username']));
+                $fname = htmlspecialchars(strip_tags($_POST['first_name']));
+                $lname = htmlspecialchars(strip_tags($_POST['last_name']));
+                $password = htmlspecialchars(strip_tags($_POST['password']));
+                $gender = htmlspecialchars(strip_tags($_POST['gender']));
+                $status = htmlspecialchars(strip_tags($_POST['account_status']));
                 // bind the parameters
-                $stmt->bindParam(':customer_name', $c_name);
+                $stmt->bindParam(':username', $username);
+                $stmt->bindParam(':first_name', $fname);
+                $stmt->bindParam(':last_name', $lname);
+                $stmt->bindParam(':password', $password);
+                $stmt->bindParam(':gender', $gender);
+                $stmt->bindParam(':account_status', $status);
                 // specify when this record was inserted to the database
-                $dob = date('Y-m-d',strtotime($_POST['birthdate']));
+                $dob = date('Y-m-d', strtotime($_POST['birthdate']));
+                $r_datetime = date('Y-m-d H:i:s', strtotime($_POST['registratio_date_time']));
                 $stmt->bindParam(':birthdate', $dob);
+                $stmt->bindParam(':registration_date_time', $r_datetime);
                 // Execute the query
                 if ($stmt->execute()) {
                     echo "<div class='alert alert-success'>Record was saved.</div>";
@@ -50,13 +62,38 @@
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
-                    <td>Customer Name</td>
-                    <td><input type='text' name='customer_name' class='form-control' /></td>
+                    <td>Username</td>
+                    <td><input type='text' name='username' class='form-control' /></td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td><input type='password' name='password' class='form-control' /></td>
+                </tr>
+
+                <tr>
+                    <td>First Name</td>
+                    <td><input type='text' name='first_name' class='form-control' /></td>
+                </tr>
+                <tr>
+                    <td>Last Name</td>
+                    <td><input type='text' name='last_name' class='form-control' /></td>
+                </tr>
+                <tr>
+                    <td>Gender</td>
+                    <td>  <input type="radio" id="female" name="gender" value="Female">
+                          <label for="female">Female</label><br>
+                          <input type="radio" id="male" name="gender" value="Male">
+                          <label for="male">Male</label><br>
                 </tr>
                 <tr>
                     <td>Date of Birth</td>
                     <td><input type='date' name='birthdate' class='form-control' /></td>
                 </tr>
+                <tr>
+                    <td>Registration Date and Time</td>
+                    <td><input type='date' name='registration_date_time' class='form-control' /></td>
+                </tr>
+
                 <tr>
                     <td></td>
                     <td>

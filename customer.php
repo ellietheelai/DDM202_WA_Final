@@ -21,7 +21,7 @@
             include 'config/database.php';
             try {
                 // insert query
-                $query = "INSERT INTO customers SET username=: username, first_name=: first_name, last_name=: last_name, birthdate=:birthdate, password=: password, gender=: gender, registration_time_date=: registration_date_time, account_status=: account_status";
+                $query = "INSERT INTO customers SET username=:username, first_name=:first_name, last_name=:last_name, birthdate=:birthdate, password=:password, gender=:gender, registration_date_time=:registration_date_time";
                 // prepare query for execution
                 $stmt = $con->prepare($query);
                 // posted values
@@ -30,17 +30,17 @@
                 $lname = htmlspecialchars(strip_tags($_POST['last_name']));
                 $password = htmlspecialchars(strip_tags($_POST['password']));
                 $gender = htmlspecialchars(strip_tags($_POST['gender']));
-                $status = htmlspecialchars(strip_tags($_POST['account_status']));
+
                 // bind the parameters
                 $stmt->bindParam(':username', $username);
                 $stmt->bindParam(':first_name', $fname);
                 $stmt->bindParam(':last_name', $lname);
                 $stmt->bindParam(':password', $password);
                 $stmt->bindParam(':gender', $gender);
-                $stmt->bindParam(':account_status', $status);
+
                 // specify when this record was inserted to the database
                 $dob = date('Y-m-d', strtotime($_POST['birthdate']));
-                $r_datetime = date('Y-m-d H:i:s', strtotime($_POST['registratio_date_time']));
+                $r_datetime = date('Y-m-d H:i:s', strtotime($_POST['registration_date_time']));
                 $stmt->bindParam(':birthdate', $dob);
                 $stmt->bindParam(':registration_date_time', $r_datetime);
                 // Execute the query
@@ -98,7 +98,7 @@
                     <td></td>
                     <td>
                         <input type='submit' value='Save' class='btn btn-primary' />
-                        <a href='index.php' class='btn btn-danger'>Back to customer details</a>
+                        <a href='customer_index.php' class='btn btn-danger'>Back to customer details</a>
                     </td>
                 </tr>
             </table>

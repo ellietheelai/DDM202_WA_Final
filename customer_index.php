@@ -22,7 +22,7 @@
         // delete message prompt will be here
 
         // select all data
-        $query = "SELECT username, customer_name, birthdate, password, gender, registration_date_time, account_status FROM customers ORDER BY customer_id DESC";
+        $query = "SELECT username, first_name, last_name, birthdate, password, gender, registration_date_time FROM customers ORDER BY username DESC";
         $stmt = $con->prepare($query);
         $stmt->execute();
 
@@ -41,12 +41,12 @@
             //creating our table heading
             echo "<tr>";
             echo "<th>Username</th>";
-            echo "<th>Customer Name</th>";
+            echo "<th>First Name</th>";
+            echo "<th>Last Name</th>";
             echo "<th>Birthdate</th>";
             echo "<th>Password</th>";
             echo "<th>Gender</th>";
             echo "<th>Registration Date and Time</th>";
-            echo "<th>Account Status</th>";
             echo "<th>Action</th>";
             echo "</tr>";
 
@@ -59,12 +59,12 @@
                 // creating new table row per record
                 echo "<tr>";
                 echo "<td>{$username}</td>";
-                echo "<td>{$customer_name}</td>";
+                echo "<td>{$first_name}</td>";
+                echo "<td>{$last_name}</td>";
                 echo "<td>{$birthdate}</td>";;
                 echo "<td>{$password}</td>";;
                 echo "<td>{$gender}</td>";;
-                echo "<td>{$registration_date_time}</td>";;
-                echo "<td>{$account_status}</td>";;
+                echo "<td>{$registration_date_time}</td>";
                 echo "<td>";
                 // read one record
                 echo "<a href='customer_read.php?customer_id={$username}' class='btn btn-info m-r-1em'>Read</a>";

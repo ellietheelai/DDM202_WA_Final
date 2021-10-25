@@ -41,11 +41,11 @@
             //creating our table heading
             echo "<tr>";
             echo "<th>Username</th>";
+            echo "<th>Password</th>";
             echo "<th>First Name</th>";
             echo "<th>Last Name</th>";
-            echo "<th>Birthdate</th>";
-            echo "<th>Password</th>";
             echo "<th>Gender</th>";
+            echo "<th>Birthdate</th>";
             echo "<th>Registration Date and Time</th>";
             echo "<th>Action</th>";
             echo "</tr>";
@@ -59,18 +59,18 @@
                 // creating new table row per record
                 echo "<tr>";
                 echo "<td>{$username}</td>";
+                echo "<td>{$password}</td>";;
                 echo "<td>{$first_name}</td>";
                 echo "<td>{$last_name}</td>";
-                echo "<td>{$birthdate}</td>";;
-                echo "<td>{$password}</td>";;
                 echo "<td>{$gender}</td>";;
+                echo "<td>{$birthdate}</td>";;
                 echo "<td>{$registration_date_time}</td>";
                 echo "<td>";
                 // read one record
-                echo "<a href='customer_read.php?customer_id={$username}' class='btn btn-info m-r-1em'>Read</a>";
+                echo "<a href='customer_read.php?username={$username}' class='btn btn-info m-r-1em'>Read</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='update.php?customer_id={$username}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='update.php?username={$username}' class='btn btn-primary m-r-1em'>Edit</a>";
 
                 // we will use this links on next part of this post
                 echo "<a href='#' onclick='delete_user({$username});'  class='btn btn-danger'>Delete</a>";

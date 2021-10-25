@@ -25,7 +25,7 @@
                 // prepare query for execution
                 $stmt = $con->prepare($query);
                 // posted values
-                $username = htmlspecialchars(strip_tags($_POST['username']));
+                $username= htmlspecialchars(strip_tags($_POST['username']));
                 $fname = htmlspecialchars(strip_tags($_POST['first_name']));
                 $lname = htmlspecialchars(strip_tags($_POST['last_name']));
                 $password = htmlspecialchars(strip_tags($_POST['password']));

@@ -22,7 +22,7 @@
         <?php
         // get passed parameter value, in this case, the record ID
         // isset() is a PHP function used to verify if a value is there or not
-        $customer_id = isset($_GET['customer_id']) ? $_GET['customer_id'] : die('ERROR: Record ID not found.');
+        $username = isset($_GET['username']) ? $_GET['username'] : die('ERROR: Record ID not found.');
 
         //include database connection
         include 'config/database.php';
@@ -30,21 +30,25 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT customer_id, customer_name, birthdate FROM customers WHERE customer_id = ? LIMIT 0,1";
+            $query = "SELECT username, first_name, last_name, birthdate, password, gender, registration_date_time FROM customers WHERE username = ? LIMIT 0,1";
             $stmt = $con->prepare($query);
 
             // this is the first question mark
-            $stmt->bindParam(1, $customer_id);
+            $stmt->bindParam(1, $username);
 
             // execute our query
             $stmt->execute();
 
             // store retrieved row to a variable
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
+           
             // values to fill up our form
-            $customer_name = $row['customer_name'];
+            $first_name = $row['first_name'];
+            $last_name = $row['last_name'];
             $birthdate = $row['birthdate'];
+            $password = $row['password'];
+            $gender = $row['gender'];
+            $registration_date_time = $row['registration_date_time'];  
         }
 
         // show error
@@ -59,14 +63,29 @@
         <!--we have our html table here where the record will be displayed-->
         <table class='table table-hover table-responsive table-bordered'>
             <tr>
-                <td>Customer Name</td>
-                <td><?php echo htmlspecialchars($customer_name, ENT_QUOTES);  ?></td>
+                <td>Password</td>
+                <td><?php echo htmlspecialchars($password, ENT_QUOTES);  ?></td>
+            </tr>
+            <tr>
+                <td>First Name</td>
+                <td><?php echo htmlspecialchars($first_name, ENT_QUOTES);  ?></td>
+            </tr>
+            <tr>
+                <td>Last Name</td>
+                <td><?php echo htmlspecialchars($last_name, ENT_QUOTES);  ?></td>
+            </tr>
+            <tr>
+                <td>Gender</td>
+                <td><?php echo htmlspecialchars($gender, ENT_QUOTES);  ?></td>
             </tr>
             <tr>
                 <td>Birthdate</td>
                 <td><?php echo date($birthdate, ENT_QUOTES);  ?></td>
             </tr>
-            
+            <tr>
+                <td>Registration Date and Time</td>
+                <td><?php echo date($registration_date_time, ENT_QUOTES);  ?></td>
+            </tr>
             <tr>
                 <td></td>
                 <td>

@@ -22,7 +22,7 @@
         // delete message prompt will be here
 
         // select all data
-        $query = "SELECT username, first_name, last_name, birthdate, password, gender, registration_date_time FROM customers ORDER BY username DESC";
+        $query = "SELECT customer_username, first_name, last_name, birthdate, password, gender, registration_date_time FROM customers ORDER BY customer_username DESC";
         $stmt = $con->prepare($query);
         $stmt->execute();
 
@@ -58,7 +58,7 @@
                 extract($row);
                 // creating new table row per record
                 echo "<tr>";
-                echo "<td>{$username}</td>";
+                echo "<td>{$customer_username}</td>";
                 echo "<td>{$password}</td>";;
                 echo "<td>{$first_name}</td>";
                 echo "<td>{$last_name}</td>";
@@ -67,13 +67,13 @@
                 echo "<td>{$registration_date_time}</td>";
                 echo "<td>";
                 // read one record
-                echo "<a href='customer_read.php?username={$username}' class='btn btn-info m-r-1em'>Read</a>";
+                echo "<a href='customer_read.php?customer_username={$customer_username}' class='btn btn-info m-r-1em'>Read</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='update.php?username={$username}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='update.php?customer_username={$customer_username}' class='btn btn-primary m-r-1em'>Edit</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='#' onclick='delete_user({$username});'  class='btn btn-danger'>Delete</a>";
+                echo "<a href='#' onclick='delete_user({$customer_username});'  class='btn btn-danger'>Delete</a>";
                 echo "</td>";
                 echo "</tr>";
             }

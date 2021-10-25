@@ -22,7 +22,7 @@
         <?php
         // get passed parameter value, in this case, the record ID
         // isset() is a PHP function used to verify if a value is there or not
-        $username = isset($_GET['username']) ? $_GET['username'] : die('ERROR: Record ID not found.');
+        $customer_username= isset($_GET['customer_username']) ? $_GET['customer_username'] : die('ERROR: Record ID not found.');
 
         //include database connection
         include 'config/database.php';
@@ -30,11 +30,11 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT username, first_name, last_name, birthdate, password, gender, registration_date_time FROM customers WHERE username = ? LIMIT 0,1";
+            $query = "SELECT customer_username, first_name, last_name, birthdate, password, gender, registration_date_time FROM customers WHERE customer_username = ? LIMIT 0,1";
             $stmt = $con->prepare($query);
 
             // this is the first question mark
-            $stmt->bindParam(1, $username);
+            $stmt->bindParam(1, $customer_username);
 
             // execute our query
             $stmt->execute();
@@ -48,7 +48,8 @@
             $birthdate = $row['birthdate'];
             $password = $row['password'];
             $gender = $row['gender'];
-            $registration_date_time = $row['registration_date_time'];  
+            $registration_date_time = $row['registration_date_time']; 
+ 
         }
 
         // show error

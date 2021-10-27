@@ -21,28 +21,24 @@
             include 'config/database.php';
             try {
                 // insert query
-                $query = "INSERT INTO customers SET username=:username, first_name=:first_name, last_name=:last_name, birthdate=:birthdate, password=:password, gender=:gender, registration_date_time=:registration_date_time";
+                $query = "INSERT INTO customers SET username=:username, first_name=:first_name, last_name=:last_name, birthdate=:birthdate, password=:password, gender=:gender";
                 // prepare query for execution
                 $stmt = $con->prepare($query);
                 // posted values
                 $username = htmlspecialchars(strip_tags($_POST['username']));
                 $fname = htmlspecialchars(strip_tags($_POST['first_name']));
                 $lname = htmlspecialchars(strip_tags($_POST['last_name']));
-                $password = htmlspecialchars(strip_tags($_POST['password']));
+                $password = md5($_POST['password']);
                 $gender = htmlspecialchars(strip_tags($_POST['gender']));
-
+                $dob = date('Y-m-d', strtotime($_POST['birthdate']));
                 // bind the parameters
                 $stmt->bindParam(':username', $username);
                 $stmt->bindParam(':first_name', $fname);
                 $stmt->bindParam(':last_name', $lname);
                 $stmt->bindParam(':password', $password);
                 $stmt->bindParam(':gender', $gender);
-
-                // specify when this record was inserted to the database
-                $dob = date('Y-m-d', strtotime($_POST['birthdate']));
-                $r_datetime = date('Y-m-d H:i:s', strtotime($_POST['registration_date_time']));
                 $stmt->bindParam(':birthdate', $dob);
-                $stmt->bindParam(':registration_date_time', $r_datetime);
+
                 // Execute the query
                 if ($stmt->execute()) {
                     echo "<div class='alert alert-success'>Record was saved.</div>";
@@ -67,9 +63,7 @@
                 </tr>
                 <tr>
                     <td>Password</td>
-                    <td><input type='password' name='password' class='form-control' id='myInput' />
-                        <input type='checkbox' onclick="myFunction()">Show Password
-                    </td>
+                    <td><input type='password' name='password' class='form-control' /></td>
                 </tr>
 
                 <tr>
@@ -83,19 +77,14 @@
                 <tr>
                     <td>Gender</td>
                     <td> <input type="radio" id="female" name="gender" value="1">
-                          <label for="female">Female</label><br>
+                          <label for="female">Female</label>
                           <input type="radio" id="male" name="gender" value="0">
-                          <label for="male">Male</label><br>
+                          <label for="male">Male</label>
                 </tr>
                 <tr>
                     <td>Date of Birth</td>
                     <td><input type='date' name='birthdate' class='form-control' /></td>
                 </tr>
-                <tr>
-                    <td>Registration Date and Time</td>
-                    <td><input type='date' name='registration_date_time' class='form-control' /></td>
-                </tr>
-
                 <tr>
                     <td></td>
                     <td>

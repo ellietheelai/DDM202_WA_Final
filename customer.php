@@ -21,18 +21,18 @@
             include 'config/database.php';
             try {
                 // insert query
-                $query = "INSERT INTO customers SET customer_username=:customer_username, first_name=:first_name, last_name=:last_name, birthdate=:birthdate, password=:password, gender=:gender, registration_date_time=:registration_date_time";
+                $query = "INSERT INTO customers SET username=:username, first_name=:first_name, last_name=:last_name, birthdate=:birthdate, password=:password, gender=:gender, registration_date_time=:registration_date_time";
                 // prepare query for execution
                 $stmt = $con->prepare($query);
                 // posted values
-                $customer_username = htmlspecialchars(strip_tags($_POST['customer_username']));
+                $username = htmlspecialchars(strip_tags($_POST['username']));
                 $fname = htmlspecialchars(strip_tags($_POST['first_name']));
                 $lname = htmlspecialchars(strip_tags($_POST['last_name']));
                 $password = htmlspecialchars(strip_tags($_POST['password']));
                 $gender = htmlspecialchars(strip_tags($_POST['gender']));
 
                 // bind the parameters
-                $stmt->bindParam(':customer_username', $customer_username);
+                $stmt->bindParam(':username', $username);
                 $stmt->bindParam(':first_name', $fname);
                 $stmt->bindParam(':last_name', $lname);
                 $stmt->bindParam(':password', $password);
@@ -63,7 +63,7 @@
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
                     <td>Username</td>
-                    <td><input type='text' name='customer_username' class='form-control' /></td>
+                    <td><input type='text' name='username' class='form-control' /></td>
                 </tr>
                 <tr>
                     <td>Password</td>
@@ -82,9 +82,9 @@
                 </tr>
                 <tr>
                     <td>Gender</td>
-                    <td> <input type="radio" id="female" name="gender" value="Female">
+                    <td> <input type="radio" id="female" name="gender" value="1">
                           <label for="female">Female</label><br>
-                          <input type="radio" id="male" name="gender" value="Male">
+                          <input type="radio" id="male" name="gender" value="0">
                           <label for="male">Male</label><br>
                 </tr>
                 <tr>

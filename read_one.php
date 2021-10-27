@@ -13,6 +13,8 @@
 <body>
 
     <!-- container -->
+    <?php include 'header.php';?>
+    
     <div class="container">
         <div class="page-header">
             <h1>Read Product</h1>

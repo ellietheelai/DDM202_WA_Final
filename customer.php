@@ -9,8 +9,8 @@
 
 <body>
     <!-- container -->
-    <?php include 'header.php';?>
-    
+    <?php include 'header.php'; ?>
+
     <div class="container">
         <div class="page-header">
             <h1>Create Customer</h1>
@@ -23,7 +23,7 @@
             include 'config/database.php';
             try {
                 // insert query
-                $query = "INSERT INTO customers SET username=:username, first_name=:first_name, last_name=:last_name, birthdate=:birthdate, password=:password, gender=:gender";
+                $query = "INSERT INTO customers SET username=:username, first_name=:first_name, last_name=:last_name, birthdate=:birthdate, password=:password, confirm_password=:confirm_password, gender=:gender";
                 // prepare query for execution
                 $stmt = $con->prepare($query);
                 // posted values
@@ -31,6 +31,7 @@
                 $fname = htmlspecialchars(strip_tags($_POST['first_name']));
                 $lname = htmlspecialchars(strip_tags($_POST['last_name']));
                 $password = md5($_POST['password']);
+                $cpassword = md5($_POST['confirm_password']);
                 $gender = htmlspecialchars(strip_tags($_POST['gender']));
                 $dob = date('Y-m-d', strtotime($_POST['birthdate']));
                 // bind the parameters
@@ -38,8 +39,16 @@
                 $stmt->bindParam(':first_name', $fname);
                 $stmt->bindParam(':last_name', $lname);
                 $stmt->bindParam(':password', $password);
+                $stmt->bindParam(':confirm_password', $cpassword);
                 $stmt->bindParam(':gender', $gender);
                 $stmt->bindParam(':birthdate', $dob);
+
+                if (strlen($password || $cpassword)< 6) {
+                    echo 'Password should be at least 6 characters in length';
+                } else {
+                    echo 'strong password';
+                }
+
 
                 // Execute the query
                 if ($stmt->execute()) {
@@ -66,6 +75,11 @@
                 <tr>
                     <td>Password</td>
                     <td><input type='password' name='password' class='form-control' /></td>
+                </tr>
+
+                <tr>
+                    <td>Confirm Password</td>
+                    <td><input type='password' name='confirm_password' class='form-control' /></td>
                 </tr>
 
                 <tr>

@@ -25,7 +25,7 @@
                     </ul>
                     <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"> Customers </button>
 
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtons">
                         <li><a class="dropdown-item" href="customer.php">Create Customer</a></li>
                         <li><a class="dropdown-item" href="customer_index.php">Read Customer</a></li>
                     </ul>

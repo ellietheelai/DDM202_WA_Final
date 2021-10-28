@@ -53,6 +53,12 @@
             catch (PDOException $exception) {
                 die('ERROR: ' . $exception->getMessage());
             }
+
+            if (is_numeric($price)) {
+                echo var_export($price, true) . " is numeric", PHP_EOL;
+            } else {
+                echo var_export($price, true) . " is NOT numeric", PHP_EOL;
+            }
         }
         ?>
 

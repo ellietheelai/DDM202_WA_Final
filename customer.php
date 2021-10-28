@@ -43,11 +43,65 @@
                 $stmt->bindParam(':gender', $gender);
                 $stmt->bindParam(':birthdate', $dob);
 
-                if (strlen($password || $cpassword)< 6) {
-                    echo 'Password should be at least 6 characters in length';
+                //if (strlen($password || $cpassword) < 6) {
+                //    echo "<div class='alert alert-danger'>'Password should be at least 6 characters in length'.</div>";
+                // } else {
+                //     echo "<div class='alert alert-success'>'Strong Password'.</div>";
+                // }
+
+                if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+                $username = $password = $cpassword = "";
+                $username_err = $password_err = $cpassword_err = "";
+
+                // Validate password
+                if (empty(trim($_POST["password"]))) {
+                    $password_err = "Please enter a password.";
+                } elseif (strlen(trim($_POST["password"])) < 6) {
+                    $password_err = "Password must have atleast 6 characters.";
                 } else {
-                    echo 'strong password';
+                    $password = trim($_POST["password"]);
+
+                    // Validate confirm password
+                    if (empty(trim($_POST["confirm_password"]))) {
+                        $cpassword_err = "Please confirm password.";
+                    } else {
+                        $cpassword = trim($_POST["confirm_password"]);
+                        if (empty($password_err) && ($password != $cpassword)) {
+                            $cpassword_err = "Password did not match.";
+                        }
+                    }
+
+                    // Check input errors before inserting in database
+                    if (empty($password_err) && empty($cpassword_err)) {
+
+                        // Prepare an insert statement
+                        $query= "INSERT INTO customers (username, first_name, last_name, birthdate, password, confirm_password, gender) VALUES ('$username', '$fname', '$lname', '$dob', '$password', '$cpassword', '$gender')";
+
+                        if ($stmt = mysqli_prepare($db_name, $query)) {
+                            // Bind variables to the prepared statement as parameters
+                            mysqli_stmt_bind_param($stmt, "ss", $param_password);
+
+                            // Set parameters
+                            $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
+
+                            // Attempt to execute the prepared statement
+                            if (mysqli_stmt_execute($stmt)) {
+                                // Redirect to login page
+                                echo "Success";
+                            } else {
+                                echo "Oops! Something went wrong. Please try again later.";
+                            }
+
+                            // Close statement
+                            mysqli_stmt_close($stmt);
+                        }
+                    }
+
+                    // Close connection
+                    mysqli_close($db_name);
                 }
+            }
 
 
                 // Execute the query
@@ -74,12 +128,12 @@
                 </tr>
                 <tr>
                     <td>Password</td>
-                    <td><input type='password' name='password' class='form-control' /></td>
+                    <td><input type='password' name='password' class='form-control'></td>
                 </tr>
 
                 <tr>
                     <td>Confirm Password</td>
-                    <td><input type='password' name='confirm_password' class='form-control' /></td>
+                    <td><input type='password' name='confirm_password' class='form-control'></td>
                 </tr>
 
                 <tr>

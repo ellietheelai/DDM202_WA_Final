@@ -22,10 +22,12 @@
             // include database connection
             include 'config/database.php';
             try {
+
                 // insert query
                 $query = "INSERT INTO customers SET username=:username, first_name=:first_name, last_name=:last_name, birthdate=:birthdate, password=:password, confirm_password=:confirm_password, gender=:gender";
                 // prepare query for execution
                 $stmt = $con->prepare($query);
+
                 // posted values
                 $username = htmlspecialchars(strip_tags($_POST['username']));
                 $fname = htmlspecialchars(strip_tags($_POST['first_name']));
@@ -34,81 +36,30 @@
                 $cpassword = md5($_POST['confirm_password']);
                 $gender = htmlspecialchars(strip_tags($_POST['gender']));
                 $dob = date('Y-m-d', strtotime($_POST['birthdate']));
-                // bind the parameters
-                $stmt->bindParam(':username', $username);
-                $stmt->bindParam(':first_name', $fname);
-                $stmt->bindParam(':last_name', $lname);
-                $stmt->bindParam(':password', $password);
-                $stmt->bindParam(':confirm_password', $cpassword);
-                $stmt->bindParam(':gender', $gender);
-                $stmt->bindParam(':birthdate', $dob);
 
-                //if (strlen($password || $cpassword) < 6) {
-                //    echo "<div class='alert alert-danger'>'Password should be at least 6 characters in length'.</div>";
-                // } else {
-                //     echo "<div class='alert alert-success'>'Strong Password'.</div>";
-                // }
-
-                if($_SERVER["REQUEST_METHOD"] == "POST"){
-
-                $username = $password = $cpassword = "";
-                $username_err = $password_err = $cpassword_err = "";
-
-                // Validate password
-                if (empty(trim($_POST["password"]))) {
-                    $password_err = "Please enter a password.";
-                } elseif (strlen(trim($_POST["password"])) < 6) {
-                    $password_err = "Password must have atleast 6 characters.";
+                if (empty($password || $cpassword)) {
+                    echo "Please enter password.";
+                } elseif ($password != $cpassword) {
+                    echo "Password does not match.";
+                } elseif (strlen($password) < 6) {
+                    echo "Password should be at least 6 characters in length";
                 } else {
-                    $password = trim($_POST["password"]);
 
-                    // Validate confirm password
-                    if (empty(trim($_POST["confirm_password"]))) {
-                        $cpassword_err = "Please confirm password.";
+                    // bind the parameters
+                    $stmt->bindParam(':username', $username);
+                    $stmt->bindParam(':first_name', $fname);
+                    $stmt->bindParam(':last_name', $lname);
+                    $stmt->bindParam(':password', $password);
+                    $stmt->bindParam(':confirm_password', $cpassword);
+                    $stmt->bindParam(':gender', $gender);
+                    $stmt->bindParam(':birthdate', $dob);
+
+                    // Execute the query
+                    if ($stmt->execute()) {
+                        echo "<div class='alert alert-success'>Record was saved.</div>";
                     } else {
-                        $cpassword = trim($_POST["confirm_password"]);
-                        if (empty($password_err) && ($password != $cpassword)) {
-                            $cpassword_err = "Password did not match.";
-                        }
+                        echo "<div class='alert alert-danger'>Unable to save record.</div>";
                     }
-
-                    // Check input errors before inserting in database
-                    if (empty($password_err) && empty($cpassword_err)) {
-
-                        // Prepare an insert statement
-                        $query= "INSERT INTO customers (username, first_name, last_name, birthdate, password, confirm_password, gender) VALUES ('$username', '$fname', '$lname', '$dob', '$password', '$cpassword', '$gender')";
-
-                        if ($stmt = mysqli_prepare($db_name, $query)) {
-                            // Bind variables to the prepared statement as parameters
-                            mysqli_stmt_bind_param($stmt, "ss", $param_password);
-
-                            // Set parameters
-                            $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
-
-                            // Attempt to execute the prepared statement
-                            if (mysqli_stmt_execute($stmt)) {
-                                // Redirect to login page
-                                echo "Success";
-                            } else {
-                                echo "Oops! Something went wrong. Please try again later.";
-                            }
-
-                            // Close statement
-                            mysqli_stmt_close($stmt);
-                        }
-                    }
-
-                    // Close connection
-                    mysqli_close($db_name);
-                }
-            }
-
-
-                // Execute the query
-                if ($stmt->execute()) {
-                    echo "<div class='alert alert-success'>Record was saved.</div>";
-                } else {
-                    echo "<div class='alert alert-danger'>Unable to save record.</div>";
                 }
             }
             // show error
@@ -128,12 +79,12 @@
                 </tr>
                 <tr>
                     <td>Password</td>
-                    <td><input type='password' name='password' class='form-control'></td>
+                    <td><input type='password' name='password' class='form-control' minlength="6" required></td>
                 </tr>
 
                 <tr>
                     <td>Confirm Password</td>
-                    <td><input type='password' name='confirm_password' class='form-control'></td>
+                    <td><input type='password' name='confirm_password' class='form-control' minlength="6" required></td>
                 </tr>
 
                 <tr>

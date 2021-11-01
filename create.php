@@ -9,7 +9,7 @@
 
 <body>
     <!-- container -->
-    <?php include 'header.php';?>
+    <?php include 'header.php'; ?>
     <div class="container">
         <div class="page-header">
             <h1>Create Product</h1>
@@ -32,32 +32,33 @@
                 $p_price = htmlspecialchars(strip_tags($_POST['promotion_price']));
                 $m_date = date(strip_tags($_POST['manufacture_date']));
                 $e_date = date(strip_tags($_POST['expired_date']));
-                // bind the parameters
-                $stmt->bindParam(':name', $name);
-                $stmt->bindParam(':description', $description);
-                $stmt->bindParam(':price', $price);
-                $stmt->bindParam(':promotion_price', $p_price);
-                $stmt->bindParam(':manufacture_date', $m_date);
-                $stmt->bindParam(':expired_date', $e_date);
-                // specify when this record was inserted to the database
-                $created = date('Y-m-d H:i:s');
-                $stmt->bindParam(':created', $created);
-                // Execute the query
-                if ($stmt->execute()) {
-                    echo "<div class='alert alert-success'>Record was saved.</div>";
+
+                if (is_numeric($price)) {
+                    echo var_export($price, true) . " is numeric", PHP_EOL;
                 } else {
-                    echo "<div class='alert alert-danger'>Unable to save record.</div>";
+                    echo var_export($price, true) . " is NOT numeric", PHP_EOL;
+
+                    // bind the parameters
+                    $stmt->bindParam(':name', $name);
+                    $stmt->bindParam(':description', $description);
+                    $stmt->bindParam(':price', $price);
+                    $stmt->bindParam(':promotion_price', $p_price);
+                    $stmt->bindParam(':manufacture_date', $m_date);
+                    $stmt->bindParam(':expired_date', $e_date);
+                    // specify when this record was inserted to the database
+                    $created = date('Y-m-d H:i:s');
+                    $stmt->bindParam(':created', $created);
+                    // Execute the query
+                    if ($stmt->execute()) {
+                        echo "<div class='alert alert-success'>Record was saved.</div>";
+                    } else {
+                        echo "<div class='alert alert-danger'>Unable to save record.</div>";
+                    }
                 }
             }
             // show error
             catch (PDOException $exception) {
                 die('ERROR: ' . $exception->getMessage());
-            }
-
-            if (is_numeric($price)) {
-                echo var_export($price, true) . " is numeric", PHP_EOL;
-            } else {
-                echo var_export($price, true) . " is NOT numeric", PHP_EOL;
             }
         }
         ?>
@@ -76,11 +77,11 @@
                 </tr>
                 <tr>
                     <td>Price</td>
-                    <td><input type='text' name='price' class='form-control' /></td>
+                    <td><input type='number' name='price' class='form-control' /></td>
                 </tr>
                 <tr>
                     <td>Promotion Price</td>
-                    <td><input type='text' name='promotion_price' class='form-control' /></td>
+                    <td><input type='number' name='promotion_price' class='form-control' /></td>
                 </tr>
                 <tr>
                     <td>Manufacture Date</td>

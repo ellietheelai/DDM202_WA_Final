@@ -21,10 +21,6 @@
             // include database connection
             include 'config/database.php';
             try {
-                // insert query
-                $query = "INSERT INTO products SET name=:name, description=:description, price=:price, created=:created, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date";
-                // prepare query for execution
-                $stmt = $con->prepare($query);
                 // posted values
                 $name = htmlspecialchars(strip_tags($_POST['name']));
                 $description = htmlspecialchars(strip_tags($_POST['description']));
@@ -32,12 +28,33 @@
                 $p_price = htmlspecialchars(strip_tags($_POST['promotion_price']));
                 $m_date = date(strip_tags($_POST['manufacture_date']));
                 $e_date = date(strip_tags($_POST['expired_date']));
+                $flag = 1;
+                $msg = "";
 
+                // if ($name == "" || $description == "" || $price == "" || $p_price == "" || $m_date == "" || $e_date == "") {
+                //     $flag = 0;
+                //     $msg = "Please fill in all information. ";
+                // }
                 if (is_numeric($price)) {
-                    echo var_export($price, true) . " is numeric", PHP_EOL;
-                } else {
-                    echo var_export($price, true) . " is NOT numeric", PHP_EOL;
+                    // var_export($price, true). PHP_EOL;
+                    $flag = 0;
+                    $msg = "Please enter a number. ";
+                }
+                // if (is_numeric($price)) {
+                //     echo var_export($price, true) . " is numeric", PHP_EOL;
+                // } else {
+                //     $msg. " is NOT numeric", PHP_EOL;
+                // }
 
+                // if ($e_date < $m_date){
+                //     $flag =0;
+                //     $msg = "Expired date should be greater then manufacture date. ";
+                // }
+                if ($flag == 1) {
+                    // insert query
+                    $query = "INSERT INTO products SET name=:name, description=:description, price=:price, created=:created, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date";
+                    // prepare query for execution
+                    $stmt = $con->prepare($query);
                     // bind the parameters
                     $stmt->bindParam(':name', $name);
                     $stmt->bindParam(':description', $description);
@@ -54,6 +71,8 @@
                     } else {
                         echo "<div class='alert alert-danger'>Unable to save record.</div>";
                     }
+                } else {
+                    echo "<div class='alert alert-danger'>$msg</div>";
                 }
             }
             // show error
@@ -77,11 +96,11 @@
                 </tr>
                 <tr>
                     <td>Price</td>
-                    <td><input type='number' name='price' class='form-control' /></td>
+                    <td><input type='text' name='price' class='form-control' /></td>
                 </tr>
                 <tr>
                     <td>Promotion Price</td>
-                    <td><input type='number' name='promotion_price' class='form-control' /></td>
+                    <td><input type='text' name='promotion_price' class='form-control' /></td>
                 </tr>
                 <tr>
                     <td>Manufacture Date</td>

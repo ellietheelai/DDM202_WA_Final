@@ -30,26 +30,29 @@
                 $e_date = date(strip_tags($_POST['expired_date']));
                 $flag = 1;
                 $msg = "";
+                $todaydate = date ("Y-m-d");
 
-                // if ($name == "" || $description == "" || $price == "" || $p_price == "" || $m_date == "" || $e_date == "") {
-                //     $flag = 0;
-                //     $msg = "Please fill in all information. ";
-                // }
-                if (is_numeric($price)) {
-                    // var_export($price, true). PHP_EOL;
+                if ($name == "" || $description == "" || $price == "" || $p_price == "" || $m_date == "" || $e_date == "") {
                     $flag = 0;
-                    $msg = "Please enter a number. ";
+                    $msg = "Please fill in all information. ";
                 }
-                // if (is_numeric($price)) {
-                //     echo var_export($price, true) . " is numeric", PHP_EOL;
-                // } else {
-                //     $msg. " is NOT numeric", PHP_EOL;
-                // }
 
-                // if ($e_date < $m_date){
-                //     $flag =0;
-                //     $msg = "Expired date should be greater then manufacture date. ";
-                // }
+                if (!is_numeric($price) && !is_numeric($p_price)) {
+                    var_export($price && $p_price, true). PHP_EOL;
+                    $flag = 0;
+                    $msg = $msg . "Please enter a number. ";
+                }
+
+                if ($m_date > $todaydate){
+                    $flag = 0;
+                    $msg = $msg . "Manufacture date should not be greater than today's date. ";
+                }
+               
+                if ($e_date < $m_date){
+                    $flag =0;
+                    $msg = $msg . "Expired date should be greater then manufacture date. ";
+                }
+
                 if ($flag == 1) {
                     // insert query
                     $query = "INSERT INTO products SET name=:name, description=:description, price=:price, created=:created, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date";

@@ -34,20 +34,23 @@
                 $msg = "";
                 $year = substr($dob, 0, 4);
                 $todayyear = date("Y");
-                $age = $todayyear - $year;                
+                $age = (int)$todayyear - (int)$year;
+                
+                echo $year;
+                echo $age;
 
                 if ($username == "" || $fname == "" || $lname == "" || $password == "" || $cpassword == "" || $gender == "" || $dob == "") {
                     $flag = 0;
                     $msg = "Please fill in all information. ";
                 }
-                // if (strlen($password) < 6) {
-                //     $flag = 0;
-                //     $msg = $msg . "Password should be at least 6 characters in length. ";
-                // }
-                // if ($password != $cpassword) {
-                //     $flag = 0;
-                //     $msg = $msg . "Password does not match. ";
-                // }
+                if (strlen($password) < 6) {
+                    $flag = 0;
+                    $msg = $msg . "Password should be at least 6 characters in length. ";
+                }
+                if ($password != $cpassword) {
+                    $flag = 0;
+                    $msg = $msg . "Password does not match. ";
+                }
                 if ($age < 18) {
                     $flag = 0;
                     $msg = $msg . "User should be 18 years old or above. ";

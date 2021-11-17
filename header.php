@@ -30,6 +30,8 @@
                         <li><a class="dropdown-item" href="customer_index.php">Read Customer</a></li>
                     </ul>
                 </div>
+                <a class="nav-link" href="logout.php">Log Out</a>
+    
             </div>
         </div>
     </nav>

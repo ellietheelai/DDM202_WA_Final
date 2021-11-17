@@ -11,6 +11,7 @@
     <div class="container">
 
         <?php
+        session_start();
         if ($_POST) {
             include 'config/database.php';
 
@@ -29,6 +30,7 @@
             if (is_array($row)) {
                 if (md5($password) == $row['password']) {
                     if ($row['account_status'] == 1) {
+                        $_SESSION["username"] = $username;
                         header("location: welcome.php");
                         exit;
                     } else {
@@ -41,7 +43,7 @@
                 echo "<div class='alert alert-danger row justify-content-center'>User Not Found.</div>";
             }
         }
-
+        
         ?>
 
 
@@ -69,8 +71,7 @@
     </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-
+    <?php include 'footer.php'; ?>
 </body>
 
 </html>

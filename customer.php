@@ -1,3 +1,5 @@
+<?php include 'session.php'; ?>
+
 <!DOCTYPE HTML>
 <html>
 
@@ -18,6 +20,8 @@
         <!-- html form to create product will be here -->
         <!-- PHP insert code will be here -->
         <?php
+
+
         if ($_POST) {
             // include database connection
             include 'config/database.php';
@@ -35,13 +39,12 @@
                 $year = substr($dob, 0, 4);
                 $todayyear = date("Y");
                 $age = (int)$todayyear - (int)$year;
-                
-               
 
                 if ($username == "" || $fname == "" || $lname == "" || $password == "" || $cpassword == "" || $gender == "" || $dob == "") {
                     $flag = 0;
                     $msg = "Please fill in all information. ";
                 }
+
                 if (strlen($password) < 6) {
                     $flag = 0;
                     $msg = $msg . "Password should be at least 6 characters in length. ";
@@ -54,10 +57,20 @@
                     $flag = 0;
                     $msg = $msg . "User should be 18 years old or above. ";
                 }
+                
+                $query = "SELECT username FROM customers WHERE username =?";
+                $stmt = $con->prepare($query);
+                $stmt->bindParam(1, $username);
+                $stmt->execute();
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if (is_array($row)) {   
+                        $flag = 0;
+                        $msg  = "Username already existed. Please use another username. ";
+                }
+
                 if ($flag == 1) {
                     // insert query
-                    
-                    
                     $query = "INSERT INTO customers SET username=:username, first_name=:first_name, last_name=:last_name, birthdate=:birthdate, password=:password, gender=:gender";
                     // prepare query for execution
                     $stmt = $con->prepare($query);
@@ -136,7 +149,7 @@
         </form>
     </div>
     <!-- end .container -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <?php include 'footer.php'; ?>
 </body>
 
 </html>

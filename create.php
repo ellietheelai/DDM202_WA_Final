@@ -43,6 +43,11 @@
                     $msg = $msg . "Please enter a number. ";
                 }
 
+                if ($p_price > $price){
+                    $flag = 0;
+                    $msg = $msg . "Promotional price is more than normal price. ";
+                }
+
                 if ($m_date > $todaydate){
                     $flag = 0;
                     $msg = $msg . "Manufacture date should not be greater than today's date. ";

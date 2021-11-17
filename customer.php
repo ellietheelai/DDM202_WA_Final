@@ -36,8 +36,7 @@
                 $todayyear = date("Y");
                 $age = (int)$todayyear - (int)$year;
                 
-                echo $year;
-                echo $age;
+               
 
                 if ($username == "" || $fname == "" || $lname == "" || $password == "" || $cpassword == "" || $gender == "" || $dob == "") {
                     $flag = 0;
@@ -57,7 +56,9 @@
                 }
                 if ($flag == 1) {
                     // insert query
-                    $query = "INSERT INTO customers SET username=:username, first_name=:first_name, last_name=:last_name, birthdate=:birthdate, password=:password, confirm_password=:confirm_password, gender=:gender";
+                    
+                    
+                    $query = "INSERT INTO customers SET username=:username, first_name=:first_name, last_name=:last_name, birthdate=:birthdate, password=:password, gender=:gender";
                     // prepare query for execution
                     $stmt = $con->prepare($query);
 
@@ -65,8 +66,8 @@
                     $stmt->bindParam(':username', $username);
                     $stmt->bindParam(':first_name', $fname);
                     $stmt->bindParam(':last_name', $lname);
-                    $stmt->bindParam(':password', $password);
-                    $stmt->bindParam(':confirm_password', $cpassword);
+                    $epass = md5($password);
+                    $stmt->bindParam(':password', $epass);
                     $stmt->bindParam(':gender', $gender);
                     $stmt->bindParam(':birthdate', $dob);
 

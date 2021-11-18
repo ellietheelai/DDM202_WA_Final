@@ -40,7 +40,7 @@
         <?php
         // get passed parameter value, in this case, the record ID
         // isset() is a PHP function used to verify if a value is there or not
-        $username = isset($_GET['username']) ? $_GET['username'] : die('ERROR: Record ID not found.');
+        $c_username = isset($_GET['username']) ? $_GET['username'] : die('ERROR: Record ID not found.');
 
         //include database connection
         include 'config/database.php';
@@ -52,7 +52,7 @@
             $stmt = $con->prepare($query);
 
             // this is the first question mark
-            $stmt->bindParam(1, $username);
+            $stmt->bindParam(1, $c_username);
 
             // execute our query
             $stmt->execute();
@@ -75,7 +75,7 @@
                 extract($row);
                 // creating new table row per record
                 echo "<tr>";
-                echo "<td>{$username}</td>";
+                echo "<td>{$c_username}</td>";
                 echo "<td>{$password}</td>";
                 echo "<td>{$fname}</td>";
                 echo "<td>{$lname}</td>";
@@ -83,13 +83,13 @@
                 echo "<td>${$dob}</td>";
                 echo "<td>";
                 // read one record
-                echo "<a href='read_one.php?username={$username}' class='btn btn-info m-r-1em'>Read</a>";
+                echo "<a href='read_one.php?username={$c_username}' class='btn btn-info m-r-1em'>Read</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='update.php?username={$username}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='update.php?username={$c_username}' class='btn btn-primary m-r-1em'>Edit</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='#' onclick='delete_user({$username});'  class='btn btn-danger'>Delete</a>";
+                echo "<a href='#' onclick='delete_user({$c_username});'  class='btn btn-danger'>Delete</a>";
                 echo "</td>";
                 echo "</tr>";
             }
@@ -102,7 +102,7 @@
         ?>
 
         <!-- HTML form to update record will be here -->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?username={$username}"); ?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?username={$c_username}"); ?>" method="post">
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
                     <td>Password</td>
@@ -122,8 +122,10 @@
                 </tr>
                 <tr>
                     <td>Gender</td>
-                    <td> <input type="radio" id="female" name="gender" value="<?php echo htmlspecialchars($gender, ENT_QUOTES);  ?>">
-                          <input type="radio" id="male" name="gender" value="<?php echo htmlspecialchars($gender, ENT_QUOTES);  ?>">
+                    <td> <input type="radio" id="female" name="gender" value="1 <?php echo htmlspecialchars($gender, ENT_QUOTES);  ?>">
+                        <label for="female">Female</label>
+                          <input type="radio" id="male" name="gender" value="0 <?php echo htmlspecialchars($gender, ENT_QUOTES);  ?>">
+                        <label for="male">Male</label>
                     </td>
                      
                 </tr>
@@ -150,7 +152,7 @@
                 // in this case, it seemed like we have so many fields to pass and
                 // it is better to label them and not use question marks
                 $query = "UPDATE customers
-                  SET password=:password, first_name:first_name, last_name=:last_name, gender=:gender, birthdate=:birthdate WHERE username=:username";
+                  SET password=:password, first_name=:first_name, last_name=:last_name, gender=:gender, birthdate=:birthdate WHERE username=:username";
                 // prepare query for excecution
                 $stmt = $con->prepare($query);
                 // posted values
@@ -165,7 +167,7 @@
                 $stmt->bindParam(':last_name', $lname);
                 $stmt->bindParam(':gender', $gender);
                 $stmt->bindParam(':birthdate', $dob);
-                $stmt->bindParam(':username', $username);
+                $stmt->bindParam(':username', $c_username);
                 // Execute the query
                 if ($stmt->execute()) {
                     echo "<div class='alert alert-success'>Record was updated.</div>";

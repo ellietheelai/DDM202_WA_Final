@@ -90,37 +90,12 @@
             }
         }
 
-
         // show error
         catch (PDOException $exception) {
             die('ERROR: ' . $exception->getMessage());
         }
         ?>
 
-        <!-- HTML form to update record will be here -->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="post">
-            <table class='table table-hover table-responsive table-bordered'>
-                <tr>
-                    <td>Name</td>
-                    <td><input type='text' name='name' value="<?php echo htmlspecialchars($name, ENT_QUOTES);  ?>" class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Description</td>
-                    <td><textarea name='description' class='form-control'><?php echo htmlspecialchars($description, ENT_QUOTES);  ?></textarea></td>
-                </tr>
-                <tr>
-                    <td>Price</td>
-                    <td><input type='text' name='price' value="<?php echo htmlspecialchars($price, ENT_QUOTES);  ?>" class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <input type='submit' value='Save Changes' class='btn btn-primary' />
-                        <a href='index.php' class='btn btn-danger'>Back to read products</a>
-                    </td>
-                </tr>
-            </table>
-        </form>
 
         <?php
         // check if form was submitted
@@ -154,6 +129,31 @@
                 die('ERROR: ' . $exception->getMessage());
             }
         } ?>
+
+        <!-- HTML form to update record will be here -->
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="post">
+            <table class='table table-hover table-responsive table-bordered'>
+                <tr>
+                    <td>Name</td>
+                    <td><input type='text' name='name' value="<?php echo htmlspecialchars($name, ENT_QUOTES);  ?>" class='form-control' /></td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td><textarea name='description' class='form-control'><?php echo htmlspecialchars($description, ENT_QUOTES);  ?></textarea></td>
+                </tr>
+                <tr>
+                    <td>Price</td>
+                    <td><input type='text' name='price' value="<?php echo htmlspecialchars($price, ENT_QUOTES);  ?>" class='form-control' /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type='submit' value='Save Changes' class='btn btn-primary' />
+                        <a href='index.php' class='btn btn-danger'>Back to read products</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
 
 
 

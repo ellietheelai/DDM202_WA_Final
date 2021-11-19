@@ -101,6 +101,44 @@
         }
         ?>
 
+
+        <?php
+        // check if form was submitted
+        if ($_POST) {
+            try {
+                // write update query
+                // in this case, it seemed like we have so many fields to pass and
+                // it is better to label them and not use question marks
+                $query = "UPDATE customers
+                  SET password=:password, first_name=:first_name, last_name=:last_name, gender=:gender, birthdate=:birthdate WHERE username=:username";
+                // prepare query for excecution
+                $stmt = $con->prepare($query);
+                // posted values
+                $password = htmlspecialchars(strip_tags($_POST['password']));
+                $fname = htmlspecialchars(strip_tags($_POST['first_name']));
+                $lname = htmlspecialchars(strip_tags($_POST['last_name']));
+                $gender = htmlspecialchars(strip_tags($_POST['gender']));
+                $dob = date(strip_tags($_POST['birthdate']));
+                // bind the parameters
+                $stmt->bindParam(':password', $password);
+                $stmt->bindParam(':first_name', $fname);
+                $stmt->bindParam(':last_name', $lname);
+                $stmt->bindParam(':gender', $gender);
+                $stmt->bindParam(':birthdate', $dob);
+                $stmt->bindParam(':username', $c_username);
+                // Execute the query
+                if ($stmt->execute()) {
+                    echo "<div class='alert alert-success'>Record was updated.</div>";
+                } else {
+                    echo "<div class='alert alert-danger'>Unable to update record. Please try again.</div>";
+                }
+            }
+            // show errors
+            catch (PDOException $exception) {
+                die('ERROR: ' . $exception->getMessage());
+            }
+        } ?>
+
         <!-- HTML form to update record will be here -->
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?username={$c_username}"); ?>" method="post">
             <table class='table table-hover table-responsive table-bordered'>
@@ -143,44 +181,6 @@
                 </tr>
             </table>
         </form>
-
-        <?php
-        // check if form was submitted
-        if ($_POST) {
-            try {
-                // write update query
-                // in this case, it seemed like we have so many fields to pass and
-                // it is better to label them and not use question marks
-                $query = "UPDATE customers
-                  SET password=:password, first_name=:first_name, last_name=:last_name, gender=:gender, birthdate=:birthdate WHERE username=:username";
-                // prepare query for excecution
-                $stmt = $con->prepare($query);
-                // posted values
-                $password = htmlspecialchars(strip_tags($_POST['password']));
-                $fname = htmlspecialchars(strip_tags($_POST['first_name']));
-                $lname = htmlspecialchars(strip_tags($_POST['last_name']));
-                $gender = htmlspecialchars(strip_tags($_POST['gender']));
-                $dob = date(strip_tags($_POST['birthdate']));
-                // bind the parameters
-                $stmt->bindParam(':password', $password);
-                $stmt->bindParam(':first_name', $fname);
-                $stmt->bindParam(':last_name', $lname);
-                $stmt->bindParam(':gender', $gender);
-                $stmt->bindParam(':birthdate', $dob);
-                $stmt->bindParam(':username', $c_username);
-                // Execute the query
-                if ($stmt->execute()) {
-                    echo "<div class='alert alert-success'>Record was updated.</div>";
-                } else {
-                    echo "<div class='alert alert-danger'>Unable to update record. Please try again.</div>";
-                }
-            }
-            // show errors
-            catch (PDOException $exception) {
-                die('ERROR: ' . $exception->getMessage());
-            }
-        } ?>
-
 
 
 

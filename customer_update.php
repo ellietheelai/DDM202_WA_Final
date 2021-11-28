@@ -86,7 +86,7 @@
                 echo "<a href='read_one.php?username={$c_username}' class='btn btn-info m-r-1em'>Read</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='update.php?username={$c_username}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='customer_update.php?username={$c_username}' class='btn btn-primary m-r-1em'>Edit</a>";
 
                 // we will use this links on next part of this post
                 echo "<a href='#' onclick='delete_user({$c_username});'  class='btn btn-danger'>Delete</a>";
@@ -101,31 +101,82 @@
         }
         ?>
 
+        <?php
+
+        if ($_POST) {
+            include 'config/database.php';
+
+
+            $query = "SELECT username, password FROM customers WHERE username =?";
+            $stmt = $con->prepare($query);
+            $stmt->bindParam(1, $username);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (is_array($row)) {
+                if ($_POSTmd5($password) !== $row['password']) {
+                    echo "<div class='alert alert-danger row justify-content-center'>Wrong Password.</div>";
+                }
+            }
+        }
+
+        ?>
+
 
         <?php
         // check if form was submitted
         if ($_POST) {
             try {
-                // write update query
-                // in this case, it seemed like we have so many fields to pass and
-                // it is better to label them and not use question marks
-                $query = "UPDATE customers
-                  SET password=:password, first_name=:first_name, last_name=:last_name, gender=:gender, birthdate=:birthdate WHERE username=:username";
-                // prepare query for excecution
-                $stmt = $con->prepare($query);
                 // posted values
-                $password = htmlspecialchars(strip_tags($_POST['password']));
+                $password = md5(htmlspecialchars(strip_tags($_POST['password'])));
                 $fname = htmlspecialchars(strip_tags($_POST['first_name']));
                 $lname = htmlspecialchars(strip_tags($_POST['last_name']));
                 $gender = htmlspecialchars(strip_tags($_POST['gender']));
                 $dob = date(strip_tags($_POST['birthdate']));
+                // $opassword = $_POST['old_password'];
+                // $npassword = $_POST['new_password'];
+                // $n_cpassword = $_POST['new_confirm_password'];
+                // $flag = 1;
+                // $msg = "";
+
+                // if (strlen($npassword) < 6) {
+                //     $flag = 0;
+                //     $msg = $msg . "Password should be at least 6 characters in length. ";
+                // }
+                // if ($npassword != $n_cpassword) {
+                //     $flag = 0;
+                //     $msg = $msg . "Password does not match. ";
+                // }
+
+                // if ($npassword == $row['password']) {
+                //    $flag = 0;
+                //    $msg = $msg . "New password cannot be the same as the current password. ";
+                // }else {
+                //     echo "Unsucessful attempt";
+                // }
+
+                // if ($npassword == $n_cpassword) {
+                //     $query = "UPDATE customers SET password='$npassword' where username=:username";
+                // }else {
+                //     echo "Unsucessful attempt";
+                // }
+
+                // write update query
+                // in this case, it seemed like we have so many fields to pass and
+                // it is better to label them and not use question marks
+                $query = "UPDATE customers
+                    SET password=:password, first_name=:first_name, last_name=:last_name, gender=:gender, birthdate=:birthdate WHERE username=:username";
+                // prepare query for excecution
+                $stmt = $con->prepare($query);
+
                 // bind the parameters
-                $stmt->bindParam(':password', $password);
+                $epass = md5($password);
+                $stmt->bindParam(':password', $epass);
                 $stmt->bindParam(':first_name', $fname);
                 $stmt->bindParam(':last_name', $lname);
                 $stmt->bindParam(':gender', $gender);
                 $stmt->bindParam(':birthdate', $dob);
                 $stmt->bindParam(':username', $c_username);
+
                 // Execute the query
                 if ($stmt->execute()) {
                     echo "<div class='alert alert-success'>Record was updated.</div>";
@@ -143,10 +194,19 @@
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?username={$c_username}"); ?>" method="post">
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
-                    <td>Password</td>
-                    <td><input type='text' name='password' value="<?php echo htmlspecialchars($password, ENT_QUOTES);  ?>" class='form-control' /></td>
+                    <td>Old Password</td>
+                    <td><input type='text' name='old_password' value="" class='form-control' /></td>
                 </tr>
+
                 <tr>
+                    <td>New Password</td>
+                    <td><input type='text' name='new_password' value="" class='form-control' /></td>
+                </tr>
+
+                <tr>
+                    <td>Confirm New Password</td>
+                    <td><input type='text' name='new_confirm_password' value="" class='form-control' /></td>
+                </tr>
 
                 <tr>
                     <td>First Name</td>
@@ -160,9 +220,11 @@
                 </tr>
                 <tr>
                     <td>Gender</td>
-                    <td> <input type="radio" id="female" name="gender" value="1 <?php echo htmlspecialchars($gender, ENT_QUOTES);  ?>">
+                    <td> <input type="radio" id="female" name="gender" value="1" <?php if (isset($gender) && $gender == "1") echo "checked" ?>>
+
                         <label for="female">Female</label>
-                          <input type="radio" id="male" name="gender" value="0 <?php echo htmlspecialchars($gender, ENT_QUOTES);  ?>">
+                          <input type="radio" id="male" name="gender" value="0" <?php if (isset($gender) && $gender == "0") echo "checked" ?>>
+
                         <label for="male">Male</label>
                     </td>
                      

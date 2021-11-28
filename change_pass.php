@@ -34,21 +34,15 @@
                 $cpassword = $_POST['confirm_password'];
                 $gender = isset($_POST['gender']) ? $_POST['gender'] : "";
                 $dob = $_POST['birthdate'];
-                $mail = $_POST['email'];
                 $flag = 1;
                 $msg = "";
                 $year = substr($dob, 0, 4);
                 $todayyear = date("Y");
                 $age = (int)$todayyear - (int)$year;
 
-                if ($username == "" || $fname == "" || $lname == "" || $password == "" || $cpassword == "" || $gender == "" || $dob == "" || $mail == "") {
+                if ($username == "" || $fname == "" || $lname == "" || $password == "" || $cpassword == "" || $gender == "" || $dob == "") {
                     $flag = 0;
                     $msg = "Please fill in all information. ";
-                }
-
-                if (filter_var($mail, FILTER_VALIDATE_EMAIL) == false) {
-                    $flag = 0;
-                    $msg = $msg . "Email is not a valid email address. ";
                 }
 
                 if (strlen($password) < 6) {
@@ -63,39 +57,21 @@
                     $flag = 0;
                     $msg = $msg . "User should be 18 years old or above. ";
                 }
-
+                
                 $query = "SELECT username FROM customers WHERE username =?";
                 $stmt = $con->prepare($query);
                 $stmt->bindParam(1, $username);
                 $stmt->execute();
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                if (is_array($row)) {
-                    $flag = 0;
-                    $msg  = $msg. "Username already existed. Please use another username. ";
+                if (is_array($row)) {   
+                        $flag = 0;
+                        $msg  = "Username already existed. Please use another username. ";
                 }
-
-                $query = "SELECT email FROM customers WHERE username=?";
-                $stmt = $con->prepare($query);
-                $stmt->bindParam(1, $username);
-                $stmt->execute();
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                if (is_array($row)) {
-                    $flag = 0;
-                    $msg  = $msg. "Email already existed. ";
-                }
-              
-                // if ($mail == $row['email']) {
-                //     $flag = 0;
-                //     $msg = $msg . "Email already existed. ";
-                // }
-                
-                
 
                 if ($flag == 1) {
                     // insert query
-                    $query = "INSERT INTO customers SET username=:username, first_name=:first_name, last_name=:last_name, birthdate=:birthdate, password=:password, gender=:gender, email=:email";
+                    $query = "INSERT INTO customers SET username=:username, first_name=:first_name, last_name=:last_name, birthdate=:birthdate, password=:password, gender=:gender";
                     // prepare query for execution
                     $stmt = $con->prepare($query);
 
@@ -107,8 +83,6 @@
                     $stmt->bindParam(':password', $epass);
                     $stmt->bindParam(':gender', $gender);
                     $stmt->bindParam(':birthdate', $dob);
-                    $stmt->bindParam(':email', $mail);
-
 
                     // Execute the query
                     if ($stmt->execute()) {
@@ -134,10 +108,6 @@
                 <tr>
                     <td>Username</td>
                     <td><input type='text' name='username' class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Email</td>
-                    <td><input type='text' name='email' class='form-control' /></td>
                 </tr>
                 <tr>
                     <td>Password</td>

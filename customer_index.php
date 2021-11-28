@@ -45,7 +45,6 @@
             //creating our table heading
             echo "<tr>";
             echo "<th>Username</th>";
-            echo "<th>Password</th>";
             echo "<th>First Name</th>";
             echo "<th>Last Name</th>";
             echo "<th>Gender</th>";
@@ -63,7 +62,6 @@
                 // creating new table row per record
                 echo "<tr>";
                 echo "<td>{$username}</td>";
-                echo "<td>{$password}</td>";;
                 echo "<td>{$first_name}</td>";
                 echo "<td>{$last_name}</td>";
                 echo "<td>".($gender != 1 ? 'Male' : 'Female')."</td>";
@@ -74,7 +72,7 @@
                 echo "<a href='customer_read.php?username={$username}' class='btn btn-info m-r-1em'>Read</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='customer_update.php?username={$username}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='c_update.php?username={$username}' class='btn btn-primary m-r-1em'>Edit</a>";
 
                 // we will use this links on next part of this post
                 echo "<a href='#' onclick='delete_user({$username});'  class='btn btn-danger'>Delete</a>";

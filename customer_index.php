@@ -26,7 +26,7 @@
         // delete message prompt will be here
 
         // select all data
-        $query = "SELECT username, first_name, last_name, birthdate, password, gender, registration_date_time FROM customers ORDER BY username DESC";
+        $query = "SELECT username, first_name, last_name, birthdate, password, gender, registration_date_time, email FROM customers ORDER BY username DESC";
         $stmt = $con->prepare($query);
         $stmt->execute();
 
@@ -45,6 +45,7 @@
             //creating our table heading
             echo "<tr>";
             echo "<th>Username</th>";
+            echo "<th>Email</th>";
             echo "<th>First Name</th>";
             echo "<th>Last Name</th>";
             echo "<th>Gender</th>";
@@ -62,6 +63,7 @@
                 // creating new table row per record
                 echo "<tr>";
                 echo "<td>{$username}</td>";
+                echo "<td>{$email}</td>";
                 echo "<td>{$first_name}</td>";
                 echo "<td>{$last_name}</td>";
                 echo "<td>".($gender != 1 ? 'Male' : 'Female')."</td>";

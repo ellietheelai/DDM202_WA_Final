@@ -17,12 +17,18 @@
 
             $username = htmlspecialchars(strip_tags($_POST['username']));
             $password = htmlspecialchars(strip_tags($_POST['password']));
+            $mail = htmlspecialchars(strip_tags($_POST['email']));
 
-            if ($username == "" || $password == "") {
+            if ($username == "" || $password == "" || $mail == "") {
                 echo "<div class='alert alert-danger row justify-content-center'>Please Enter Username and Password.</div>";
             }
 
-            $query = "SELECT username, password, account_status FROM customers WHERE username =?";
+            if (filter_var($mail, FILTER_VALIDATE_EMAIL) == false) {
+                $flag = 0;
+                echo  "<div class='alert alert-danger'>Email is not a valid email address.</div> ";
+            }
+
+            $query = "SELECT username, email, password, account_status FROM customers WHERE username =?";
             $stmt = $con->prepare($query);
             $stmt->bindParam(1, $username);
             $stmt->execute();
@@ -34,16 +40,19 @@
                         header("location: welcome.php");
                         exit;
                     } else {
-                        echo "<div class='alert alert-danger row justify-content-center'>Not Active Account.</div>";
+                        echo "<div class='alert alert-danger row justify-content-center'>Inactive Account.</div>";
                     }
                 } else {
-                    echo "<div class='alert alert-danger row justify-content-center'>Wrong Password.</div>";
+                    echo "<div class='alert alert-danger row justify-content-center text-center'>Incorrect password / email.</div>";
                 }
             } else {
                 echo "<div class='alert alert-danger row justify-content-center'>User Not Found.</div>";
             }
+            echo $mail;
         }
+
         
+
         ?>
 
 
@@ -56,6 +65,10 @@
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="floatingInput" name="username" placeholder="Username">
                             <label for="floatingInput">Username</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="floatingInput" name="email" placeholder="Email">
+                            <label for="floatingInput">Email</label>
                         </div>
                         <div class=" form-floating">
                             <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">

@@ -26,48 +26,51 @@
                 // posted values
                 $name = htmlspecialchars(strip_tags($_POST['name']));
                 $description = htmlspecialchars(strip_tags($_POST['description']));
+                $category = isset($_POST['category']) ? $_POST['category'] : "";
                 $price = htmlspecialchars(strip_tags($_POST['price']));
                 $p_price = htmlspecialchars(strip_tags($_POST['promotion_price']));
                 $m_date = date(strip_tags($_POST['manufacture_date']));
                 $e_date = date(strip_tags($_POST['expired_date']));
                 $flag = 1;
                 $msg = "";
-                $todaydate = date ("Y-m-d");
+                $todaydate = date("Y-m-d");
+                echo "category".$category;
 
-                if ($name == "" || $description == "" || $price == "" || $p_price == "" || $m_date == "" || $e_date == "") {
+                if ($name == "" || $description == "" || $price == "" || $p_price == "" || $m_date == "" || $e_date == "" || $category == "") {
                     $flag = 0;
                     $msg = "Please fill in all information. ";
                 }
 
                 if (!is_numeric($price) && !is_numeric($p_price)) {
-                    var_export($price && $p_price, true). PHP_EOL;
+                    var_export($price && $p_price, true) . PHP_EOL;
                     $flag = 0;
                     $msg = $msg . "Please enter a number. ";
                 }
 
-                if ($p_price > $price){
+                if ($p_price > $price) {
                     $flag = 0;
                     $msg = $msg . "Promotional price is more than normal price. ";
                 }
 
-                if ($m_date > $todaydate){
+                if ($m_date > $todaydate) {
                     $flag = 0;
                     $msg = $msg . "Manufacture date should not be greater than today's date. ";
                 }
-               
-                if ($e_date < $m_date){
-                    $flag =0;
+
+                if ($e_date < $m_date) {
+                    $flag = 0;
                     $msg = $msg . "Expired date should be greater then manufacture date. ";
                 }
 
                 if ($flag == 1) {
                     // insert query
-                    $query = "INSERT INTO products SET name=:name, description=:description, price=:price, created=:created, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date";
+                    $query = "INSERT INTO products SET name=:name, description=:description, category=:category, price=:price, created=:created, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date";
                     // prepare query for execution
                     $stmt = $con->prepare($query);
                     // bind the parameters
                     $stmt->bindParam(':name', $name);
                     $stmt->bindParam(':description', $description);
+                    $stmt->bindParam(':category', $category);
                     $stmt->bindParam(':price', $price);
                     $stmt->bindParam(':promotion_price', $p_price);
                     $stmt->bindParam(':manufacture_date', $m_date);
@@ -85,13 +88,14 @@
                     echo "<div class='alert alert-danger'>$msg</div>";
                 }
             }
+            
             // show error
             catch (PDOException $exception) {
                 die('ERROR: ' . $exception->getMessage());
             }
         }
         ?>
-
+    
 
         <!-- html form here where the product information will be entered -->
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
@@ -103,6 +107,18 @@
                 <tr>
                     <td>Description</td>
                     <td><textarea name='description' class='form-control'></textarea></td>
+                </tr>
+                <tr>
+                    <td>Category</td>
+                    <td> <input type="radio" id="gadget" name="category" value="1">
+                          <label for="gadget">Gadget</label>
+                          <input type="radio" id="sports" name="category" value="2">
+                          <label for="sports">Sports</label>
+                        <input type="radio" id="accessories" name="category" value="3">
+                          <label for="accessories">Accessories</label>
+                        <input type="radio" id="stationary" name="category" value="4">
+                          <label for="stationary">Stationary</label>
+                    </td>
                 </tr>
                 <tr>
                     <td>Price</td>

@@ -26,7 +26,7 @@
         <?php
         // get passed parameter value, in this case, the record ID
         // isset() is a PHP function used to verify if a value is there or not
-        $id = isset($_GET['id']) ? $_GET['id'] : die('ERROR: Record ID not found.');
+        $p_id = isset($_GET['id']) ? $_GET['id'] : die('ERROR: Record ID not found.');
 
         //include database connection
         include 'config/database.php';
@@ -34,11 +34,12 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT id, name, description, price, promotion_price, manufacture_date, expired_date FROM products WHERE id = ? LIMIT 0,1";
+            $query = "SELECT products.id as productid, products.name, category, description, price, promotion_price, manufacture_date, expired_date ,category.id, category.name as catname FROM products INNER JOIN category ON products.category = category.id WHERE products.id = ? LIMIT 0,1 ";
+
             $stmt = $con->prepare($query);
 
             // this is the first question mark
-            $stmt->bindParam(1, $id);
+            $stmt->bindParam(1, $p_id);
 
             // execute our query
             $stmt->execute();
@@ -50,9 +51,11 @@
             $name = $row['name'];
             $description = $row['description'];
             $price = $row['price'];
+            $catname = $row['catname'];
             $promotion_price = $row['promotion_price'];
             $manufacture_date = $row['manufacture_date'];
             $expired_date = $row['expired_date'];
+
         }
 
         // show error
@@ -73,6 +76,10 @@
             <tr>
                 <td>Description</td>
                 <td><?php echo htmlspecialchars($description, ENT_QUOTES);  ?></td>
+            </tr>
+            <tr>
+                <td>Category</td>
+                <td><?php echo htmlspecialchars($catname, ENT_QUOTES);  ?></td>
             </tr>
             <tr>
                 <td>Price</td>

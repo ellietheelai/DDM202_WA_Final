@@ -20,13 +20,13 @@
                 <div class="dropdown ms-auto ">
                     <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"> Products </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="create.php">Create Product</a></li>
-                        <li><a class="dropdown-item" href="index.php">Read Product</a></li>
+                        <li><a class="dropdown-item" href="products_create.php">Create Product</a></li>
+                        <li><a class="dropdown-item" href="products_index.php">Read Product</a></li>
                     </ul>
                     
                     <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"> Customers </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtons">
-                        <li><a class="dropdown-item" href="customer.php">Create Customer</a></li>
+                        <li><a class="dropdown-item" href="customer_create.php">Create Customer</a></li>
                         <li><a class="dropdown-item" href="customer_index.php">Read Customer</a></li>
                     </ul>
                 </div>

@@ -74,7 +74,7 @@
                 echo "<a href='customer_read.php?username={$username}' class='btn btn-info m-r-1em'>Read</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='c_update.php?username={$username}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='customer_update.php?username={$username}' class='btn btn-primary m-r-1em'>Edit</a>";
 
                 // we will use this links on next part of this post
                 echo "<a href='#' onclick='delete_user({$username});'  class='btn btn-danger'>Delete</a>";

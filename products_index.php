@@ -29,23 +29,27 @@
         // include database connection
         include 'config/database.php';
 
-        // delete message prompt will be here
-        
+        $action = isset($_GET['action']) ? $_GET['action'] : "";
+
+        // if it was redirected from delete.php
+        if ($action == 'deleted') {
+            echo "<div class='alert alert-success'>Record was deleted.</div>";
+        }
+
+
         $category = "";
 
         if ($_POST) {
-            
+
             $category = htmlspecialchars(strip_tags($_POST['category']));
-              
+
             if ($category == "A") {
                 $query = "SELECT products.id as productid , products.name, category, price, promotion_price, manufacture_date, expired_date ,category.id,category.name as catname FROM products INNER JOIN category ON products.category = category.id ORDER BY products.id DESC";
-            }else{
+            } else {
                 $query = "SELECT products.id as productid , products.name, category, price, promotion_price, manufacture_date, expired_date ,category.id,category.name as catname FROM products INNER JOIN category ON products.category = category.id WHERE category = ? ORDER BY products.id DESC ";
             }
-
-        }else{
+        } else {
             $query = "SELECT products.id as productid, products.name, category, price, promotion_price, manufacture_date, expired_date ,category.id,category.name as catname FROM products INNER JOIN category ON products.category = category.id ORDER BY products.id DESC";
-
         }
 
         $stmt = $con->prepare($query);
@@ -56,7 +60,7 @@
         $num = $stmt->rowCount();
 
         // link to create record form
-        echo "<a href='createproduct.php' class='btn btn-primary m-b-1em'>Create New Product</a>";
+        echo "<a href='products_create.php' class='btn btn-primary m-b-1em'>Create New Product</a>";
         ?>
 
         <?php
@@ -127,7 +131,7 @@
                 echo "<a href='products_update.php?id={$productid}' class='btn btn-primary m-r-1em'>Edit</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='#' onclick='delete_user({$productid});'  class='btn btn-danger'>Delete</a>";
+                echo '<a href="javascript: void(0)" onclick="delete_user('.$productid.');"  class="btn btn-danger">Delete</a>';
                 echo "</td>";
                 echo "</tr>";
             }
@@ -145,7 +149,19 @@
 
     </div> <!-- end .container -->
 
-    <!-- confirm delete record will be here -->
+    <script type='text/javascript'>
+        // confirm record deletion
+        function delete_user(id) {
+
+            var answer = confirm('Are you sure?');
+            if (answer) {
+                // if user clicked ok,
+                // pass the id to delete.php and execute the delete query
+                window.location = 'products_delete.php?id=' + id;
+            }
+        }
+    </script>
+
     <?php include 'footer.php'; ?>
 </body>
 

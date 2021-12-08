@@ -48,7 +48,7 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT id, name, description, price FROM products WHERE id = ? LIMIT 0,1";
+            $query = "SELECT id, name, category, description, price FROM products WHERE id = ? LIMIT 0,1";
             $stmt = $con->prepare($query);
 
             // this is the first question mark
@@ -62,6 +62,7 @@
 
             // values to fill up our form
             $name = $row['name'];
+            $category = $row['category'];
             $description = $row['description'];
             $price = $row['price'];
 
@@ -74,6 +75,7 @@
                 echo "<tr>";
                 echo "<td>{$id}</td>";
                 echo "<td>{$name}</td>";
+                echo "<td>{$category}</td>";
                 echo "<td>{$description}</td>";
                 echo "<td>${$price}</td>";
                 echo "<td>";
@@ -105,16 +107,18 @@
                 // in this case, it seemed like we have so many fields to pass and
                 // it is better to label them and not use question marks
                 $query = "UPDATE products
-                  SET name=:name, description=:description,price=:price WHERE id = :id";
+                  SET name=:name, category=:category, description=:description,price=:price WHERE id = :id";
                 // prepare query for excecution
                 $stmt = $con->prepare($query);
                 // posted values
                 $name = htmlspecialchars(strip_tags($_POST['name']));
+                $category = htmlspecialchars(strip_tags($_POST['category']));
                 $description = htmlspecialchars(strip_tags($_POST['description']));
                 $price = htmlspecialchars(strip_tags($_POST['price']));
                 // bind the parameters
                 $stmt->bindParam(':name', $name);
                 $stmt->bindParam(':description', $description);
+                $stmt->bindParam(':category', $category);
                 $stmt->bindParam(':price', $price);
                 $stmt->bindParam(':id', $id);
                 // Execute the query
@@ -140,6 +144,10 @@
                 <tr>
                     <td>Description</td>
                     <td><textarea name='description' class='form-control'><?php echo htmlspecialchars($description, ENT_QUOTES);  ?></textarea></td>
+                </tr>
+                <tr>
+                    <td>Category</td>
+                    <td><textarea name='category' class='form-control'><?php echo htmlspecialchars($category, ENT_QUOTES);  ?></textarea></td>
                 </tr>
                 <tr>
                     <td>Price</td>

@@ -35,6 +35,12 @@
                         <li><a class="dropdown-item" href="category_create.php">Create Category</a></li>
                         <li><a class="dropdown-item" href="category_index.php">Read Category</a></li>
                     </ul>
+
+                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"> Order </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtons">
+                        <li><a class="dropdown-item" href="order_create.php">Create Category</a></li>
+                        <li><a class="dropdown-item" href="#">Read Category</a></li>
+                    </ul>
                 </div>
                 <a class="nav-link" href="logout.php">Log Out</a>
     

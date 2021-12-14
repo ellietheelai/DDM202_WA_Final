@@ -19,9 +19,10 @@
         <!-- html form to create product will be here -->
         <!-- PHP insert code will be here -->
         <?php
+        include 'config/database.php';
         if ($_POST) {
             // include database connection
-            include 'config/database.php';
+
             try {
                 // posted values
                 $name = htmlspecialchars(strip_tags($_POST['name']));
@@ -34,7 +35,7 @@
                 $flag = 1;
                 $msg = "";
                 $todaydate = date("Y-m-d");
-                echo "category".$category;
+                echo "category" . $category;
 
                 if ($name == "" || $description == "" || $price == "" || $p_price == "" || $m_date == "" || $e_date == "" || $category == "") {
                     $flag = 0;
@@ -88,14 +89,14 @@
                     echo "<div class='alert alert-danger'>$msg</div>";
                 }
             }
-            
+
             // show error
             catch (PDOException $exception) {
                 die('ERROR: ' . $exception->getMessage());
             }
         }
         ?>
-    
+
 
         <!-- html form here where the product information will be entered -->
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
@@ -110,14 +111,25 @@
                 </tr>
                 <tr>
                     <td>Category</td>
-                    <td> <input type="radio" id="gadget" name="category" value="1">
-                          <label for="gadget">Gadget</label>
-                          <input type="radio" id="sports" name="category" value="2">
-                          <label for="sports">Sports</label>
-                        <input type="radio" id="accessories" name="category" value="3">
-                          <label for="accessories">Accessories</label>
-                        <input type="radio" id="stationary" name="category" value="4">
-                          <label for="stationary">Stationary</label>
+                    <td>
+                        <?php
+                        $categoryquery = "SELECT id , name FROM category ORDER BY id DESC";
+                        $categorystmt = $con->prepare($categoryquery);
+                        $categorystmt->execute();
+
+                        $num = $categorystmt->rowCount();
+
+                        if ($num > 0) {
+                            echo "<select class= 'form-select' aria-label='Default select example' name='category'>";
+                            echo "<option value='A'>Select a category</option>";
+                            while ($categoryrow = $categorystmt->fetch(PDO::FETCH_ASSOC)) {
+                                extract($categoryrow);
+                                echo "<option value=$id>$name";
+                                echo "</option>";
+                            }
+                            echo "</select>";
+                        }
+                        ?>
                     </td>
                 </tr>
                 <tr>

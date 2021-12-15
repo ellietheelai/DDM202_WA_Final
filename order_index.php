@@ -11,13 +11,13 @@
 
 <body>
     <!-- container -->
-    <?php include 'header.php';?>
-    
+    <?php include 'header.php'; ?>
+
     <div class="container">
         <div class="page-header">
-            <h1>Read Customers</h1>
+            <h1>Read Orders</h1>
         </div>
-
+      
         <!-- PHP code to read records will be here -->
         <?php
         // include database connection
@@ -33,16 +33,40 @@
         }
 
         // select all data
-        $query = "SELECT username, first_name, last_name, birthdate, password, gender, registration_date_time, email FROM customers ORDER BY username DESC";
+        $query = "SELECT order_id, customer, order_datetime, first_name, last_name FROM orders INNER JOIN customers ON orders.customer = customers.username ORDER BY orders.order_id DESC";
         $stmt = $con->prepare($query);
         $stmt->execute();
+        ?>
+
+<?php
+
+// $link = mysql_connect("localhost", "mysql_user", "mysql_password");
+// mysql_select_db("database", $link);
+
+// $result = mysql_query("SELECT * FROM table1", $link);
+// $num_rows = mysql_num_rows($result);
+
+// echo "$num_rows Zeilen\n";
+
+?>
+
+        <?php
+          include 'config/database.php';
+
+          $qquery = "SELECT count(order_id) FROM orderdetails INNER JOIN orders ON orderdetails.order_id = orders.order_id WHERE order_id = ? ORDER BY order_id DESC";
+          $qstmt = $con->prepare($query);
+          $qstmt->execute();
+  
+          // this is how to get number of rows returned
+          $qnum = $qstmt->rowCount();
+  
+          echo $qnum;
 
         // this is how to get number of rows returned
         $num = $stmt->rowCount();
-        echo $num;
 
         // link to create record form
-        echo "<a href='customer_create.php' class='btn btn-primary m-b-1em mb-3'>Create New Customer</a>";
+        echo "<a href='order_create.php' class='btn btn-primary m-b-1em mb-3'>Create New Order</a>";
 
         //check if more than 0 record found
         if ($num > 0) {
@@ -52,13 +76,10 @@
 
             //creating our table heading
             echo "<tr>";
-            echo "<th>Username</th>";
-            echo "<th>Email</th>";
-            echo "<th>First Name</th>";
-            echo "<th>Last Name</th>";
-            echo "<th>Gender</th>";
-            echo "<th>Birthdate</th>";
-            echo "<th>Registration Date and Time</th>";
+            echo "<th>Order ID</th>";
+            echo "<th>Customer Name</th>";
+            echo "<th>Order Date and Time</th>";
+            echo "<th>Quantity</th>";
             echo "<th>Action</th>";
             echo "</tr>";
 
@@ -70,28 +91,22 @@
                 extract($row);
                 // creating new table row per record
                 echo "<tr>";
-                echo "<td>{$username}</td>";
-                echo "<td>{$email}</td>";
-                echo "<td>{$first_name}</td>";
-                echo "<td>{$last_name}</td>";
-                echo "<td>".($gender != 1 ? 'Male' : 'Female')."</td>";
-                echo "<td>{$birthdate}</td>";;
-                echo "<td>{$registration_date_time}</td>";
+                echo "<td>{$order_id}</td>";
+                echo "<td>{$first_name} {$last_name}</td>";
+                echo "<td>{$order_datetime}</td>";
+                echo "<td>{$qnum}</td>";
                 echo "<td>";
                 // read one record
-                echo "<a href='customer_read.php?username={$username}' class='btn btn-info m-r-1em'>Read</a>";
+                echo "<a href='customer_read.php?order_id={$order_id}' class='btn btn-info m-r-1em'>Read</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='customer_update.php?username={$username}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='customer_update.php?order_id={$order_id}' class='btn btn-primary m-r-1em'>Edit</a>";
 
                 // we will use this links on next part of this post
-                echo "<a onclick='delete_user({$username});'  class='btn btn-danger'>Delete</a>";
+                echo "<a onclick='delete_user({$order_id});'  class='btn btn-danger'>Delete</a>";
                 echo "</td>";
                 echo "</tr>";
             }
-
-
-
             // end table
             echo "</table>";
         }
@@ -110,13 +125,13 @@
 
     <script type='text/javascript'>
         // confirm record deletion
-        function delete_user(username) {
+        function delete_user(order_id) {
 
             var answer = confirm('Are you sure?');
             if (answer) {
                 // if user clicked ok,
                 // pass the id to delete.php and execute the delete query
-                window.location = 'customer_delete.php?username=' +  username;
+                window.location = 'customer_delete.php?order_id=' + order_id;
             }
         }
     </script>

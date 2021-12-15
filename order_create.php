@@ -24,57 +24,43 @@
                 include 'config/database.php';
 
                 if ($_POST) {
-                    // include database connection
+
                     // echo "<pre>";
                     // var_dump($_POST);
                     // echo "</pre>";
-                    /*
-                $pp=$_POST['product_id'];
-                $qq =$_POST['quantity'];
-
-                echo $pp[0]."=".$qq[0]."<br>";
-                echo $pp[1]."=".$qq[1]."<br>";
-                echo $pp[2]."=".$qq[2]."<br>";
-                */
 
                     // posted values
                     $customer = $_POST['customer'];
                     $product_id = $_POST['product_id'];
                     $quantity = $_POST['quantity'];
-                    $insert = 0;
 
                     // insert query
                     $query = "INSERT INTO orders SET customer=:customer";
                     $stmt = $con->prepare($query);
-
                     $stmt->bindParam(':customer', $customer);
                     $stmt->execute();
                     $id = $con->lastInsertId();
                     echo "<div class='alert alert-success'>Record was saved. The Order ID is $id.</div>";
-                    
-                    while ($insert < 3) {
-                        if ($stmt->execute()) {
-                            // insert query
-                            $query = "INSERT INTO orderdetails SET order_id=:order_id, product_id=:product_id, quantity=:quantity";
-                            // prepare query for execution
-                            $stmt = $con->prepare($query);
 
-                            // bind the parameters
-                            $stmt->bindParam(':order_id', $id);
-                            $stmt->bindParam(':product_id', $product_id[$insert]);
-                            $stmt->bindParam(':quantity', $quantity[$insert]);
+                    for ($y = 0; $y < count($product_id); $y++) {
+                        // insert query
+                        $query = "INSERT INTO orderdetails SET order_id=:order_id, product_id=:product_id, quantity=:quantity";
+                        // prepare query for execution
+                        $stmt = $con->prepare($query);
 
-                            echo $product_id[$insert] . "<br>";
-                            echo $quantity[$insert];
+                        // bind the parameters
+                        $stmt->bindParam(':order_id', $id);
+                        $stmt->bindParam(':product_id', $product_id[$y]);
+                        $stmt->bindParam(':quantity', $quantity[$y]);
 
-                            $stmt->execute();
-                        } else {
-                            echo "<div class='alert alert-danger'>Unable to save record.</div>";
-                        }
-                        $insert++; //+1
+                        // echo $product_id[$y]. "<br>";
+                        // echo $quantity[$y]. "<br>"; 
+                        // echo "<br>";
+
+                        $stmt->execute();
                     }
                 }
-                
+
                 echo "<tr>";
                 echo "<td>Customer ID</td>";
                 echo "<td>";
@@ -99,66 +85,75 @@
                 echo "</tr>";
                 ?>
 
-                <tr>
-                    <td>Products</td>
-                    <td>
-                        <div class="row">
-                            <div class="col">
+                <table id="order_table" class='table table-hover table-responsive table-bordered'>
+                    <tr class='productQuantity'>
+                        <td>Product</td>
+                        <td>
+                            <div>
                                 <?php
-                                $orderQuantityA = 0;
-                                $orderQuantityB = 0;
                                 $productquery = "SELECT id, name FROM products ORDER BY id DESC";
                                 $productstmt = $con->prepare($productquery);
+                                $productstmt->execute();
+                                $productnum = $productstmt->rowCount();
+                                
+                                if ($productnum > 0) {
 
-
-                                while ($orderQuantityA < 3) {
-
-                                    $orderQuantityA++; //+1
-                                    $productstmt->execute();
-                                    $productnum = $productstmt->rowCount();
-
-                                    //$stmt->bindParam(':quantity', $product_id[$orderQuantityA]);
-                                    if ($productnum > 0) {
-
-                                        echo "<select class= 'form-select' aria-label='Default select example' name='product_id[]'>";
-                                        echo "<option value='A'>Product</option>";
-                                        while ($row = $productstmt->fetch(PDO::FETCH_ASSOC)) {
-                                            extract($row);
-                                            echo "<option value=$id>$name";
-                                            echo "</option>";
-                                        }
-                                        echo "</select>";
+                                    echo "<select class= 'form-select' aria-label='Default select example' name='product_id[]'>";
+                                    echo "<option value='A'>Product</option>";
+                                    while ($row = $productstmt->fetch(PDO::FETCH_ASSOC)) {
+                                        extract($row);
+                                        echo "<option value=$id>$name";
+                                        echo "</option>";
                                     }
+                                    echo "</select>";
                                 }
                                 ?>
                             </div>
-                    </td>
-                </tr>
-
+                        </td>
+                        <td>
+                            <div>
+                                <select class='form-select' name='quantity[]'>
+                                    <option value=''>-- Select Quantity --</option>
+                                    <option value='1'>1</option>
+                                    <option value='2'>2</option>
+                                    <option value='3'>3</option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <div class="d-flex justify-content-center flex-column flex-lg-row">
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="add_one btn mb-3 mx-2">Add More Product</button>
+                        <button type="button" class="del_last btn mb-3 mx-2">Delete Last Product</button>
+                    </div>
+                </div>
                 <tr>
-                    <td>Products</td>
-                    <td>
-                        <div class="col">
-                            <?php
-                            while ($orderQuantityB < 3) {
-                                $orderQuantityB++;
-                                echo "<select class='form-select' aria-label='Default select example' name='quantity[]'>
-                                        <option value='A'>Quantity</option>
-                                        <option value='1'>1</option>
-                                        <option value='2'>2</option>
-                                        <option value='3'>3</option>
-                                    </select>";
-                            }
-                            ?>
-                        </div>
-                    </td>
+                    <td colspan="2"><input type='submit' value='Submit' class='btn btn-primary'></td>
                 </tr>
+            </table>
+        </form>
     </div>
-    </form>
-    </table>
-    <td><input type='submit' value='Submit' class='btn btn-primary' /></td>
 
     <?php include 'footer.php'; ?>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('click', function(event) {
+            if (event.target.matches('.add_one')) {
+                var element = document.querySelector('.productQuantity');
+                var clone = element.cloneNode(true);
+                element.after(clone);
+            }
+            if (event.target.matches('.del_last')) {
+                var total = document.querySelectorAll('.productQuantity').length;
+                if (total > 1) {
+                    var element = document.querySelector('.productQuantity');
+                    element.remove(element);
+                }
+            }
+        }, false);
+    </script>
 </body>
 
 </html>

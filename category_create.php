@@ -84,7 +84,7 @@
               
                     <td>
                         <input type='submit' value='Save' class='btn btn-primary' />
-                        <a href='customer_index.php' class='btn btn-danger'>Back to customer details</a>
+                        <a href='category_index.php' class='btn btn-danger'>Back to category details</a>
                     </td>
                 </tr>
             </table>

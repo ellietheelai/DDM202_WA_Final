@@ -97,7 +97,7 @@
                 echo "<td>{$qnum}</td>";
                 echo "<td>";
                 // read one record
-                echo "<a href='customer_read.php?order_id={$order_id}' class='btn btn-info m-r-1em'>Read</a>";
+                echo "<a href='order_read.php?order_id={$order_id}' class='btn btn-info m-r-1em'>Read</a>";
 
                 // we will use this links on next part of this post
                 echo "<a href='customer_update.php?order_id={$order_id}' class='btn btn-primary m-r-1em'>Edit</a>";

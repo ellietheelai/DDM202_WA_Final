@@ -33,31 +33,58 @@
                     $customer = $_POST['customer'];
                     $product_id = $_POST['product_id'];
                     $quantity = $_POST['quantity'];
+                    $flag = 1;
+                    $msg = "";
 
-                    // insert query
-                    $query = "INSERT INTO orders SET customer=:customer";
-                    $stmt = $con->prepare($query);
-                    $stmt->bindParam(':customer', $customer);
-                    $stmt->execute();
-                    $id = $con->lastInsertId();
-                    echo "<div class='alert alert-success'>Record was saved. The Order ID is $id.</div>";
+
+                    if ($customer == "") {
+                        $flag = 0;
+                        $msg = "Please choose a username. ";
+                    }
 
                     for ($y = 0; $y < count($product_id); $y++) {
+                        if ($product_id[$y] == "" || $quantity[$y] == "") {
+                            $flag = 0;
+                            $msg = "Please choose a product and quantity. ";
+                        }
+                    }
+
+
+
+
+                    if ($flag == 1) {
                         // insert query
-                        $query = "INSERT INTO orderdetails SET order_id=:order_id, product_id=:product_id, quantity=:quantity";
-                        // prepare query for execution
+                        $query = "INSERT INTO orders SET customer=:customer";
                         $stmt = $con->prepare($query);
-
-                        // bind the parameters
-                        $stmt->bindParam(':order_id', $id);
-                        $stmt->bindParam(':product_id', $product_id[$y]);
-                        $stmt->bindParam(':quantity', $quantity[$y]);
-
-                        // echo $product_id[$y]. "<br>";
-                        // echo $quantity[$y]. "<br>"; 
-                        // echo "<br>";
-
+                        $stmt->bindParam(':customer', $customer);
                         $stmt->execute();
+                        $id = $con->lastInsertId();
+                        echo "<div class='alert alert-success'>Record was saved. The Order ID is $id.</div>";
+
+                        for ($y = 0; $y < count($product_id); $y++) {
+                            // insert query
+                            $query = "INSERT INTO orderdetails SET order_id=:order_id, product_id=:product_id, quantity=:quantity";
+                            // prepare query for execution
+                            $stmt = $con->prepare($query);
+
+                            // bind the parameters
+                            $stmt->bindParam(':order_id', $id);
+                            $stmt->bindParam(':product_id', $product_id[$y]);
+                            $stmt->bindParam(':quantity', $quantity[$y]);
+
+                            // echo $product_id[$y]. "<br>";
+                            // echo $quantity[$y]. "<br>"; 
+                            // echo "<br>";
+
+                            $stmt->execute();
+                        }
+                    } else {
+                        echo "<div class='alert alert-danger'>$msg</div>";
+                    }
+
+                    if (count($product_id) !== count(array_unique($product_id))) {
+                        $flag = 0;
+                        $msg = "Products cannot be repeated. ";
                     }
                 }
 
@@ -73,7 +100,7 @@
                 if ($num > 0) {
 
                     echo "<select class='form-select' aria-label='Default select example' name='customer'>";
-                    echo "<option value='A'>Username</option>";
+                    echo "<option value=''>Username</option>";
                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         extract($row);
                         echo "<option value=$username>$first_name $last_name";
@@ -95,7 +122,7 @@
                                 $productstmt = $con->prepare($productquery);
                                 $productstmt->execute();
                                 $productnum = $productstmt->rowCount();
-                                
+
                                 if ($productnum > 0) {
 
                                     echo "<select class= 'form-select' aria-label='Default select example' name='product_id[]'>";

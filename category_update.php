@@ -92,30 +92,33 @@
         ?>
 
         <?php
+        // check if form was submitted
         if ($_POST) {
-
-            $name = htmlspecialchars(strip_tags($_POST['name']));
-            $flag = 1;
-
-            if ($name == "") {
-                $flag = 0;
-                echo "<div class='alert alert-danger'>Please fill in all information. </div>";
-            }
-
-            if ($flag == 1) {
-                $query = "UPDATE category SET name=:name ";
+            try {
+                // write update query
+                // in this case, it seemed like we have so many fields to pass and
+                // it is better to label them and not use question marks
+                $query = "UPDATE category
+                  SET name=:name WHERE id = :id";
+                // prepare query for excecution
                 $stmt = $con->prepare($query);
+                // posted values
+                $name = htmlspecialchars(strip_tags($_POST['name']));
+                // bind the parameters
                 $stmt->bindParam(':name', $name);
-
+                $stmt->bindParam(':id', $id);
+                // Execute the query
                 if ($stmt->execute()) {
                     echo "<div class='alert alert-success'>Record was updated.</div>";
                 } else {
                     echo "<div class='alert alert-danger'>Unable to update record. Please try again.</div>";
                 }
             }
-        }
-
-        ?>
+            // show errors
+            catch (PDOException $exception) {
+                die('ERROR: ' . $exception->getMessage());
+            }
+        } ?>
 
         <!-- HTML form to update record will be here -->
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$cat_id}"); ?>" method="post">

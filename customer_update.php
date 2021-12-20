@@ -134,15 +134,16 @@
                 echo "<div class='alert alert-danger'>User should be 18 years old or above.</div> ";
             }
 
-            $query = "SELECT email FROM customers WHERE email= ?";
+            $query = "SELECT email FROM customers WHERE email = ? AND username <> ?";
             $stmt = $con->prepare($query);
             $stmt->bindParam(1, $mail);
+            $stmt->bindParam(2, $c_username);
             $stmt->execute();
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (is_array($row)) {
-                    $flag = 0;
-                    echo  "<div class='alert alert-danger'>Email already existed.</div> ";
+                $flag = 0;
+                echo  "<div class='alert alert-danger'>Email already existed.</div> ";
             }
 
             if ($password == "" && $npassword == "" && $n_cpassword == "") {

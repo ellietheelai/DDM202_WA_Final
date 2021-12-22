@@ -220,57 +220,6 @@
                 }
             }
         }
-
-
-        // if ($password == "" || $npassword == "" || $n_cpassword == ""){
-        //     $flag = 0;
-        //     echo "<div class='alert alert-danger'>Please fill in all information. </div>";
-        // }
-
-
-        //     $flag = 0;
-        //     echo "<div class='alert alert-danger'>User should be 18 years old or above.</div> ";
-        // }
-
-        // if ($npassword == $n_cpassword) {
-        //     $query = "UPDATE customers SET password='$npassword' where username=:username";
-        // } else {
-        //     echo "Unsucessful attempt";
-        // }
-
-
-
-
-        //             if ($flag == 1) {
-        //                 // write update query
-        //                 // in this case, it seemed like we have so many fields to pass and
-        //                 // it is better to label them and not use question marks
-        //                 $query = "UPDATE customers
-        //             SET first_name=:first_name, last_name=:last_name, gender=:gender, birthdate=:birthdate WHERE username=:username";
-        //                 // prepare query for excecution
-        //                 $stmt = $con->prepare($query);
-
-        //                 // bind the parameters
-        //                 $stmt->bindParam(':first_name', $fname);
-        //                 $stmt->bindParam(':last_name', $lname);
-        //                 $stmt->bindParam(':gender', $gender);
-        //                 $stmt->bindParam(':birthdate', $dob);
-        //                 $stmt->bindParam(':username', $c_username);
-
-        //                 
-
-        //         } else {
-        //              // write update query
-        //                 // in this case, it seemed like we have so many fields to pass and
-        // it is better to label them and not use question marks
-
-        //     }
-        // }
-        //     // show errors
-        //     catch (PDOException $exception) {
-        //         die('ERROR: ' . $exception->getMessage());
-        //     }
-        // }
         ?>
 
         <!-- HTML form to update record will be here -->

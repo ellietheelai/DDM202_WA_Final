@@ -75,9 +75,7 @@
                 echo "<td>${$name}</td>";
                 echo "<td>";
                 // read one record
-                echo "<a href='read_one.php?id={$id}' class='btn btn-info m-r-1em'>Read</a>";
-
-                echo "<a href='c_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='category_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>";
 
                 echo "<a href='#' onclick='delete_user({$id});'  class='btn btn-danger'>Delete</a>";
                 echo "</td>";
@@ -135,7 +133,7 @@
                 
                     <td>
                         <input type='submit' value='Save Changes' class='btn btn-primary' />
-                        <a href='category_index.php' class='btn btn-danger'>Back to read customers</a>
+                        <a href='category_index.php' class='btn btn-danger'>Back to read category</a>
                     </td>
                 </tr>
             </table>

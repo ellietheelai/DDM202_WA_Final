@@ -17,7 +17,7 @@
         <div class="page-header">
             <h1>Read Orders</h1>
         </div>
-      
+
         <!-- PHP code to read records will be here -->
         <?php
         // include database connection
@@ -38,30 +38,7 @@
         $stmt->execute();
         ?>
 
-<?php
-
-// $link = mysql_connect("localhost", "mysql_user", "mysql_password");
-// mysql_select_db("database", $link);
-
-// $result = mysql_query("SELECT * FROM table1", $link);
-// $num_rows = mysql_num_rows($result);
-
-// echo "$num_rows Zeilen\n";
-
-?>
-
         <?php
-          include 'config/database.php';
-
-          $qquery = "SELECT count(order_id) FROM orderdetails INNER JOIN orders ON orderdetails.order_id = orders.order_id WHERE order_id = ? ORDER BY order_id DESC";
-          $qstmt = $con->prepare($query);
-          $qstmt->execute();
-  
-          // this is how to get number of rows returned
-          $qnum = $qstmt->rowCount();
-  
-          echo $qnum;
-
         // this is how to get number of rows returned
         $num = $stmt->rowCount();
 
@@ -79,7 +56,6 @@
             echo "<th>Order ID</th>";
             echo "<th>Customer Name</th>";
             echo "<th>Order Date and Time</th>";
-            echo "<th>Quantity</th>";
             echo "<th>Action</th>";
             echo "</tr>";
 
@@ -94,7 +70,6 @@
                 echo "<td>{$order_id}</td>";
                 echo "<td>{$first_name} {$last_name}</td>";
                 echo "<td>{$order_datetime}</td>";
-                echo "<td>{$qnum}</td>";
                 echo "<td>";
                 // read one record
                 echo "<a href='order_read.php?order_id={$order_id}' class='btn btn-info m-r-1em'>Read</a>";
@@ -131,7 +106,7 @@
             if (answer) {
                 // if user clicked ok,
                 // pass the id to delete.php and execute the delete query
-                window.location = 'customer_delete.php?order_id=' + order_id;
+                window.location = 'order_delete.php?order_id=' + order_id;
             }
         }
     </script>

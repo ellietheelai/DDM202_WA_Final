@@ -85,13 +85,6 @@
                     $flag = 0;
                     $msg  = $msg. "Email already existed. ";
                 }
-              
-                // if ($mail == $row['email']) {
-                //     $flag = 0;
-                //     $msg = $msg . "Email already existed. ";
-                // }
-                
-                
 
                 if ($flag == 1) {
                     // insert query

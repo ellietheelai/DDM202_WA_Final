@@ -67,7 +67,6 @@
                 echo "<td>{$name}</td>";
                 echo "<td>";
                 // read one record
-                echo "<a href='category_read.php?id={$id}' class='btn btn-info m-r-1em'>Read</a>";
 
                 // we will use this links on next part of this post
                 echo "<a href='category_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>";

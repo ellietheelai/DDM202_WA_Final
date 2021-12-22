@@ -21,6 +21,12 @@
             <h1>Read Product</h1>
         </div>
 
+        <style>
+            .alnright {
+                text-align: right;
+            }
+        </style>
+
         <?php
         // get passed parameter value, in this case, the record ID
         // isset() is a PHP function used to verify if a value is there or not
@@ -46,17 +52,13 @@
             <table class=' table table-hover table-responsive table-bordered'>
                 <tr>
                     <td>Order ID</td>
-                    <td colespan="5"><?php echo htmlspecialchars($order_id, ENT_QUOTES); ?></td>
+                    <td colespan="8"><?php echo htmlspecialchars($order_id, ENT_QUOTES); ?></td>
                 </tr>
                 <?php
                 $totalamount = 0;
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    // extract row
-                    // this will make $row['firstname'] to just $firstname only
                     extract($row);
-                    // creating new table row per record
                 ?>
-
                     <tr>
                         <td>Product</td>
                         <td><?php echo htmlspecialchars($proname, ENT_QUOTES); ?></td>
@@ -65,31 +67,27 @@
                         <td>Price</td>
                         <td><?php echo htmlspecialchars($proprice, ENT_QUOTES); ?></td>
                         <td>Total</td>
-                        <td><?php 
-                        $total = ($proprice * $quantity);
-                        echo $total;
-                        $totalamount = $totalamount+$total;
-                        ?></td>
+                        <td><?php
+                            $total = ($proprice * $quantity);
+                            echo  number_format($total, 2);
+                            $totalamount = $totalamount + $total;
+                            ?></td>
                     </tr>
-
-                    <tr>
-                    <td>Total</td>
-                    <td colspan="5"><?php
-                        echo number_format($totalamount, 2);
-                        ?></td>
-                </tr>
             <?php
                 }
             }
-
             // show error
             catch (PDOException $exception) {
                 die('ERROR: ' . $exception->getMessage());
             }
             ?>
-
             <tr>
-                <td colspan="4">
+                <td>Total Amount</td>
+                <td class = alnright colspan="8"><?php echo number_format($totalamount, 2) ?></td>
+
+            </tr>
+            <tr>
+                <td colspan="8">
                     <a href='order_index.php' class='btn btn-danger'>Back to read orders</a>
                 </td>
             </tr>

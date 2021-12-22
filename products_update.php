@@ -147,7 +147,26 @@
                 </tr>
                 <tr>
                     <td>Category</td>
-                    <td><textarea name='category' class='form-control'><?php echo htmlspecialchars($category, ENT_QUOTES);  ?></textarea></td>
+                    <td>
+                        <?php
+                        $categoryquery = "SELECT id , name FROM category ORDER BY id DESC";
+                        $categorystmt = $con->prepare($categoryquery);
+                        $categorystmt->execute();
+
+                        $num = $categorystmt->rowCount();
+
+                        if ($num > 0) {
+                            echo "<select class= 'form-select' aria-label='Default select example' name='category'>";
+                            echo "<option value='A'>Select a category</option>";
+                            while ($categoryrow = $categorystmt->fetch(PDO::FETCH_ASSOC)) {
+                                extract($categoryrow);
+                                echo "<option value=$id>$name";
+                                echo "</option>";
+                            }
+                            echo "</select>";
+                        }
+                        ?>
+                    </td>
                 </tr>
                 <tr>
                     <td>Price</td>

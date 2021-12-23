@@ -37,7 +37,7 @@
                 if (md5($password) == $row['password']) {
                     if ($row['account_status'] == 1) {
                         $_SESSION["username"] = $username;
-                        header("location: welcome.php");
+                        header("location: welcome.php?username= {$username}");
                         exit;
                     } else {
                         echo "<div class='alert alert-danger row justify-content-center'>Inactive Account.</div>";

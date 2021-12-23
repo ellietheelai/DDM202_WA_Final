@@ -1,9 +1,9 @@
 <?php
 // used to connect to the database
-$host = "localhost";
-$db_name = "online_store";
-$username = "root";
-$password = "";
+$host = "sql313.epizy.com";
+$db_name = "epiz_30655152_online_store";
+$username = "epiz_30655152";
+$password = "LiZABnRkWvYJH";
   
 try {
     $con = new PDO("mysql:host={$host};dbname={$db_name}", $username, $password);

@@ -5,12 +5,11 @@
 
 <head>
     <title>PDO - Read Records - PHP CRUD Tutorial</title>
-    <!-- Latest compiled and minified Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- custom css -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    
+    
     <style>
         .m-r-1em {
             margin-right: 1em;
@@ -31,17 +30,17 @@
 </head>
 
 <body>
-    <?php include 'header.php'; ?>
-    <!-- container -->
+    <div class="menu">
+        <?php include 'header.php'; ?>
+    </div>
     <div class="container">
         <div class="page-header">
-            <h1>Update Customer</h1>
+            <h1>Update Category</h1>
         </div>
-        <!-- PHP read record by ID will be here -->
         <?php
         // get passed parameter value, in this case, the record ID
         // isset() is a PHP function used to verify if a value is there or not
-        $cat_id = isset($_GET['id']) ? $_GET['id'] : die('ERROR: Record ID not found.');
+        $id = isset($_GET['id']) ? $_GET['id'] : die('ERROR: Record ID not found.');
 
         //include database connection
         include 'config/database.php';
@@ -53,7 +52,7 @@
             $stmt = $con->prepare($query);
 
             // this is the first question mark
-            $stmt->bindParam(1, $cat_id);
+            $stmt->bindParam(1, $id);
 
             // execute our query
             $stmt->execute();
@@ -72,11 +71,15 @@
                 // creating new table row per record
                 echo "<tr>";
                 echo "<td>{$id}</td>";
-                echo "<td>${$name}</td>";
+                echo "<td>{$name}</td>";
                 echo "<td>";
                 // read one record
-                echo "<a href='category_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='read_one_category.php?id={$id}' class='btn btn-info m-r-1em'>Read</a>";
 
+                // we will use this links on next part of this post
+                echo "<a href='updatecategory.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>";
+
+                // we will use this links on next part of this post
                 echo "<a href='#' onclick='delete_user({$id});'  class='btn btn-danger'>Delete</a>";
                 echo "</td>";
                 echo "</tr>";
@@ -88,7 +91,6 @@
             die('ERROR: ' . $exception->getMessage());
         }
         ?>
-
         <?php
         // check if form was submitted
         if ($_POST) {
@@ -118,19 +120,18 @@
             }
         } ?>
 
-        <!-- HTML form to update record will be here -->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$cat_id}"); ?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="post">
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
                     <td>ID</td>
-                    <td><?php echo htmlspecialchars($cat_id, ENT_QUOTES);  ?></td>
+                    <td><?php echo htmlspecialchars($id, ENT_QUOTES);  ?></td>
                 </tr>
-
                 <tr>
                     <td>Name</td>
                     <td><input type='text' name='name' value="<?php echo htmlspecialchars($name, ENT_QUOTES);  ?>" class='form-control' /></td>
                 </tr>
-                
+                <tr>
+                    <td></td>
                     <td>
                         <input type='submit' value='Save Changes' class='btn btn-primary' />
                         <a href='category_index.php' class='btn btn-danger'>Back to read category</a>
@@ -138,12 +139,8 @@
                 </tr>
             </table>
         </form>
-
-
-
-
     </div>
-    <!-- end .container -->
+    <?php include 'footer.php'; ?>
 </body>
 
 </html>
